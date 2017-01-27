@@ -1,0 +1,16 @@
+[
+{
+  "modid": "sevtechores",
+  "name": "SevTech-Ores",
+  "description": "Adds tiered material generation.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Darkhax", "Jaredlll08"],
+  "credits": "Darkosto for the idea!",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
