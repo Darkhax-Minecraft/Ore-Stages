@@ -22,3 +22,4 @@
 usernamecache.json
 *.stackdump
 *.log
+*.launch
