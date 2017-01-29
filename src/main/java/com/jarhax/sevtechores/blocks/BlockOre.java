@@ -1,12 +1,16 @@
 package com.jarhax.sevtechores.blocks;
 
+import com.jarhax.sevtechores.api.ores.*;
 import com.jarhax.sevtechores.tileentities.TileEntityOre;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.*;
 import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
 
@@ -17,7 +21,6 @@ public class BlockOre extends Block implements ITileEntityProvider {
 	
 	public BlockOre() {
 		super(Material.ROCK);
-		
 		setHarvestLevel("pickaxe", 0);
 	}
 	
@@ -28,13 +31,14 @@ public class BlockOre extends Block implements ITileEntityProvider {
 	
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		if(player.isCreative()){
-			return true;
+		if(player.isCreative()) {
+			return world.setBlockState(pos, net.minecraft.init.Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
 		}
-		ItemStack activeStack = player.getActiveItemStack();
+		ItemStack activeStack = player.inventory.getCurrentItem();
 		if(activeStack != null && activeStack.getItem().getToolClasses(activeStack).contains("pickaxe")) {
 			if(activeStack.getItem().getHarvestLevel(activeStack, "pickaxe", player, state) >= ((TileEntityOre) world.getTileEntity(pos)).getStoredOre().getHarvestLevel()) {
-				return true;
+				this.onBlockHarvested(world, pos, state, player);
+				return world.setBlockState(pos, net.minecraft.init.Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
 			}
 		}
 		
