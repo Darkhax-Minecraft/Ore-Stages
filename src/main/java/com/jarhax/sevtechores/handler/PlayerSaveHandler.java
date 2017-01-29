@@ -3,6 +3,7 @@ package com.jarhax.sevtechores.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jarhax.sevtechores.api.OreRegistry;
 import com.jarhax.sevtechores.api.ores.OreTier;
 import com.jarhax.sevtechores.STO;
 
@@ -79,7 +80,7 @@ public class PlayerSaveHandler {
 	
 	public static class Default implements ICustomData {
 		
-		private List<OreTier> unlockedTiers;
+		private List<OreTier> unlockedTiers = new ArrayList<OreTier>();
 		
 		public List<OreTier> getUnlockedTiers () {
 			
@@ -122,7 +123,7 @@ public class PlayerSaveHandler {
 			final NBTTagList list = tag.getTagList("Tiers", 8);
 			
 			for (int index = 0; index < list.tagCount(); index++)
-				instance.unlockTier(OreTier.TIERS.get(new ResourceLocation(list.getStringTagAt(index))));
+				instance.unlockTier(OreRegistry.TIERS.get(list.getStringTagAt(index)));
 		}
 	}
 	
