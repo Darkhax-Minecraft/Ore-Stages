@@ -34,14 +34,13 @@ minecraft {
     version = "1.10.2-12.18.3.2221"
     runDir = "run"
     mappings = "snapshot_20161111"
-    useDepAts = true
 }
 
 jar {
 
     manifest {
     
-        attributes "FMLAT": "sevtechores_at.cfg"
+        attributes "FMLCorePlugin": "com.jarhax.sevtechores.asm.LoadingPluginSevTechOres", "FMLCorePluginContainsFMLMod": "true"
     }
 }
 
