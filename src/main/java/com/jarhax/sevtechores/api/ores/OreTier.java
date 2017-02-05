@@ -14,7 +14,7 @@ public class OreTier {
 	public OreTier (String id) {
 
 		this.tierId = id;
-		this.ores = new ArrayList<ResourceLocation>();
+		this.ores = new ArrayList<>();
 	}
 
 	public OreTier (String tierId, ArrayList<ResourceLocation> ores) {

@@ -82,7 +82,7 @@ public class PlayerSaveHandler {
 
 	public static class Default implements ICustomData {
 
-		private final List<OreTier> unlockedTiers = new ArrayList<OreTier>();
+		private final List<OreTier> unlockedTiers = new ArrayList<>();
 
 		@Override
 		public List<OreTier> getUnlockedTiers () {

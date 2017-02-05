@@ -1,86 +1,74 @@
 package com.jarhax.sevtechores.handler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.jarhax.sevtechores.world.gen.feature.WorldGenSevOre;
-
+import net.minecraft.block.BlockOre;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.event.terraingen.OreGenEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class WorldGenHandler {
 
 	/**
-	 * A list of all the known minable block states. Every time an ore generates it will be
-	 * added to this list. This list is used purely for information gathering and has no
-	 * functional value.
+	 * WARNING: This method is specified through a hard coded string in
+	 * {@link com.jarhax.sevtechores.asm.ClassTransformerSevTechOres}. If this method is
+	 * renamed, or has it's signature changed, the ASM for this method will break. This
+	 * includes things like changing package names, the descriptor, and so on. So don't touch
+	 * it!
+	 *
+	 * Called at the start of {@link World#setBlockState(BlockPos, IBlockState, int)}. Allows
+	 * for the block being placed to be changed, or modified.
+	 *
+	 * @param world The world the block is being placed in.
+	 * @param pos The position of the block being placed.
+	 * @param newState The state being placed.
+	 * @param flags The placement flags.
+	 * @return Whether or not the vanilla behavior should be ignored. If true is returned,
+	 *         {@link World#setBlockState(BlockPos, IBlockState, int)} will return false.
 	 */
-	public static final List<IBlockState> KNOWN_STATES = new ArrayList<IBlockState>();
+	public static boolean preBlockSet (World world, BlockPos pos, IBlockState newState, int flags) {
 
-	/**
-	 * A list of all the known minable block states, which do not have an ore tier specified.
-	 * Every time an unhandled minable ore is generated it will be added here. This list is
-	 * used purely for information gathering and has no functional value.
-	 */
-	public static final List<IBlockState> UNKNOWN_STATES = new ArrayList<IBlockState>();
+		// TODO replace with the actual tile code. This is a test placeholder.
+		if (isOre(newState, true)) {
 
-	/**
-	 * A map which caches all of the custom generator objects. This cache should only be
-	 * modified through {@link #getGenerator(IBlockState, WorldGenMinable)}. Used to keep
-	 * object creation to a minimum during the ore generation process.
-	 */
-	public static final Map<IBlockState, WorldGenSevOre> GENERATORS = new HashMap<IBlockState, WorldGenSevOre>();
-
-	@SubscribeEvent
-	public void onGenerateMinable (OreGenEvent.GenerateMinable event) {
-
-		final WorldGenerator gen = event.getGenerator();
-
-		if (gen instanceof WorldGenMinable) {
-
-			final IBlockState state = ((WorldGenMinable) gen).oreBlock;
-
-			if (!KNOWN_STATES.contains(state)) {
-				KNOWN_STATES.add(state);
-			}
-
-			// TOOD check if there is a tier handling the state.
-			if (true) {
-
-				getGenerator(state, (WorldGenMinable) gen).generate(event.getWorld(), event.getRand(), event.getPos());
-				event.setResult(Result.DENY);
-			}
-
-			else if (UNKNOWN_STATES.contains(state)) {
-				UNKNOWN_STATES.add(state);
-			}
-
-			System.out.println(String.format("Attempted to spawn %s at %s", state.getBlock().getLocalizedName(), event.getPos().toString()));
+			world.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState(), flags);
+			System.out.println(newState + " placed at " + pos);
+			return true;
 		}
+
+		return false;
 	}
 
 	/**
-	 * Gets the modified sevtech generator for a minable block. If one does not exist, it will
-	 * be created.
+	 * Checks if a block is an ore or not. An ore is considered any block which extends
+	 * {@link net.minecraft.block.BlockOre}, has an ore dict entry which starts with ore.
+	 * Optionally, the display name of the block can also be checked.
 	 *
-	 * @param state The state to make a generator for.
-	 * @param gen The generator to copy.
-	 * @return The sevtech generator instance.
+	 * @param state The state/block to check.
+	 * @param checkName Whether or not the display name should be checked.
+	 * @return Whether or not the block was an ore.
 	 */
-	private static WorldGenSevOre getGenerator (IBlockState state, WorldGenMinable gen) {
+	public static boolean isOre (IBlockState state, boolean checkName) {
 
-		if (GENERATORS.containsKey(state))
-			return GENERATORS.get(state);
+		if (state == null || state.getBlock() == null)
+			return false;
 
-		final WorldGenSevOre sevGen = new WorldGenSevOre(gen);
-		GENERATORS.put(state, sevGen);
+		if (state.getBlock() instanceof BlockOre)
+			return true;
 
-		return sevGen;
+		final ItemStack stack = new ItemStack(Item.getItemFromBlock(state.getBlock()), 1, state.getBlock().getMetaFromState(state));
+
+		if (stack != null && stack.getItem() != null) {
+			for (final int oreID : OreDictionary.getOreIDs(stack))
+				if (OreDictionary.getOreName(oreID).startsWith("ore"))
+					return true;
+
+			if (checkName && stack.getItem().getItemStackDisplayName(stack).matches(".*(^|\\s)([oO]re)($|\\s)."))
+				return true;
+		}
+
+		return false;
 	}
 }
