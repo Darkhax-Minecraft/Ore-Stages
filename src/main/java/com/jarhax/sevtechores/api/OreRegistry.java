@@ -13,6 +13,10 @@ public class OreRegistry {
 
 		TIERS.put(tier.getTierId(), tier);
 	}
+	
+	public static OreTier removeTier(String name){
+		return TIERS.remove(name);
+	}
 
 	public static OreTier getTier (String location) {
 
