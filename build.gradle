@@ -44,10 +44,17 @@ jar {
     }
 }
 
-dependencies {
-
+repositories {
+    mavenCentral()
+    maven {
+        name "CRT"
+        url "http://maven.blamejared.com"
+    }
 }
 
+dependencies {
+    compile "MineTweaker3:MineTweaker3-MC1102-Main:1.10.2-3.0.20.70"
+}
 processResources {
 
     inputs.property "version", project.version
