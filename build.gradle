@@ -1,47 +1,29 @@
 buildscript {
-
     repositories {
-    
         jcenter()
-        
-        maven {
-        
-            url = "http://files.minecraftforge.net/maven"
-        }
+        maven { url = "http://files.minecraftforge.net/maven" }
     }
-    
     dependencies {
-    
-        classpath "net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
+apply plugin: 'net.minecraftforge.gradle.forge'
 
-apply plugin: "net.minecraftforge.gradle.forge"
 
 version = "1.0"
 group = "com.jarhax.sevtechores"
 archivesBaseName = "SevTechOres"
 
-sourceCompatibility = targetCompatibility = "1.6"
-
+sourceCompatibility = targetCompatibility = "1.8" 
 compileJava {
-
-    sourceCompatibility = targetCompatibility = "1.6"
+    sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
-
-    version = "1.10.2-12.18.3.2221"
+    version = "1.11.2-13.20.0.2294"
     runDir = "run"
-    mappings = "snapshot_20161111"
-}
-
-jar {
-
-    manifest {
     
-        attributes "FMLCorePlugin": "com.jarhax.sevtechores.asm.LoadingPluginSevTechOres", "FMLCorePluginContainsFMLMod": "true"
-    }
+    mappings = "snapshot_20161220"
 }
 
 repositories {
@@ -53,23 +35,19 @@ repositories {
 }
 
 dependencies {
-    compile "MineTweaker3:MineTweaker3-MC1102-Main:1.10.2-3.0.20.70"
+    compile "MineTweaker3:MineTweaker3-MC1112-Main:1.11.2-3.0.24.82"
 }
 processResources {
-
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
     from(sourceSets.main.resources.srcDirs) {
-    
-        include "mcmod.info"
-        expand "version": project.version, "mcversion": project.minecraft.version
+        include 'mcmod.info'
+                
+        expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-
+        
     from(sourceSets.main.resources.srcDirs) {
-    
-        exclude "mcmod.info"
+        exclude 'mcmod.info'
     }
-
-    rename '(.+_at.cfg)', 'META-INF/$1'
 }
