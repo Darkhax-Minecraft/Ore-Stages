@@ -7,8 +7,9 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 
-public final class Registry {
+public final class OreTiersAPI {
 
     /**
      * A map which links every stage, by name to an OreStage object.
@@ -147,5 +148,28 @@ public final class Registry {
     public static boolean isBlacklisted (IBlockState state) {
 
         return BLACKLIST.contains(state);
+    }
+
+    /**
+     * Unlocks a stage for a player.
+     *
+     * @param player The player to unlock the stage for.
+     * @param stage The stage to unlock.
+     */
+    public static void unlockStage (EntityPlayer player, String stage) {
+
+        PlayerDataHandler.getHandler(player).unlockStage(stage);
+    }
+
+    /**
+     * Checks if a player has a stage.
+     *
+     * @param player The player to check.
+     * @param stage The stage to check for.
+     * @return Whether or not the player has the stage.
+     */
+    public static boolean hasStage (EntityPlayer player, String stage) {
+
+        return PlayerDataHandler.getHandler(player).hasUnlockedStage(stage);
     }
 }
