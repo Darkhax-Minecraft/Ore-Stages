@@ -1,5 +1,7 @@
 package com.jarhax.oretiers;
 
+import com.jarhax.oretiers.api.PlayerDataHandler;
+
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -14,6 +16,7 @@ public class OreTiers {
     @Mod.EventHandler
     public void preInit (FMLPreInitializationEvent ev) {
 
+        PlayerDataHandler.initialize();
     }
 
     @Mod.EventHandler
