@@ -10,10 +10,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = "oretiers", name = "Ore Tiers", version = "@VERSION@") // ,
-                                                                    // dependencies
-                                                                    // =
-                                                                    // "required-after:bookshelf@[@VERSION_BOOKSHELF@,);required-after:minetweaker3@[@VERSION_MINETWEAKER@,)")
+@Mod(modid = "oretiers", name = "Ore Tiers", version = "@VERSION@", dependencies ="required-after:bookshelf@[1.5.0.370,);required-after:crafttweaker@[3.0.23,)")
 public class OreTiers {
 
     public static NetworkHandler network = new NetworkHandler("oretiers");
