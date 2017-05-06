@@ -1,6 +1,7 @@
 package com.jarhax.oretiers;
 
 import com.jarhax.oretiers.api.PlayerDataHandler;
+import com.jarhax.oretiers.compat.crt.CompatCRT;
 import com.jarhax.oretiers.packet.PacketUnlockStage;
 
 import net.darkhax.bookshelf.network.NetworkHandler;
@@ -29,6 +30,6 @@ public class OreTiers {
 
     @Mod.EventHandler
     public void postInit (FMLPostInitializationEvent ev) {
-
+        CompatCRT.postInit();
     }
 }
