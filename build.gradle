@@ -24,16 +24,12 @@ buildscript {
 
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
         classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.0.7'
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.2.1'
-        classpath 'ModsIOUpload:ModsIOUpload:2.1.15'
     }
 }
 
 apply plugin: 'maven'
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.matthewprenger.cursegradle'
-apply plugin: 'net.cazzar.gradle.modsio'
-apply plugin: 'org.sonarqube'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -50,7 +46,7 @@ minecraft {
     useDepAts = true
     
     replace '@VERSION@', project.version
-    replace '@VERSION_BOOKSHELF@', "${version_bookshlef}"
+    replace '@VERSION_BOOKSHELF@', "${version_bookshelf}"
     replaceIn "${mod_class}.java"
 }
 
@@ -88,7 +84,7 @@ repositories {
 
 dependencies {
 
-    deobfCompile "net.darkhax.bookshelf:Bookshelf:${version_bookshelf}"
+    deobfCompile "net.darkhax.bookshelf:Bookshelf:${version_minecraft}-${version_bookshelf}"
     deobfCompile "MineTweaker3:MineTweaker3-MC1112-Main:1.11.2-${version_minetweaker}"
 }
 
@@ -188,27 +184,5 @@ curseforge {
         addArtifact(deobfJar)
         addArtifact(sourcesJar)
         addArtifact(javadocJar)
-    }
-}
-
-modsIO {
-    
-    key = System.getenv('ModsIOApiKey') ? System.getenv('ModsIOApiKey') : '0'
-    
-    project {
-    
-        artifact = jar.archivePath
-        modid = "${id_modsio}"
-        minecraft = "${version_minecraft}"
-        changelog = getGitChangelog()
-        current = true
-    }
-}
-
-sonarqube {
-
-    properties {
-        property 'sonar.host.url', 'https://sonarqube.com'
-        property 'sonar.login', System.getenv('sonarQubeApiKey')
     }
 }
