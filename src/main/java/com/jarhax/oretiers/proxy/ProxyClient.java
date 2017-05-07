@@ -5,6 +5,7 @@ import com.jarhax.oretiers.api.OreTiersAPI;
 import net.darkhax.bookshelf.client.render.block.RenderBlockEvent;
 import net.darkhax.bookshelf.util.PlayerUtils;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -42,6 +43,7 @@ public class ProxyClient extends ProxyCommon {
 
         if (stageInfo != null && !OreTiersAPI.hasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
             event.setState(stageInfo.getSecond());
+            event.setModel(Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(stageInfo.getSecond()));
         }
     }
 }
