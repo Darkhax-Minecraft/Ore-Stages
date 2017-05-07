@@ -24,4 +24,16 @@ public class ActionAddBlacklist extends BaseUndoableAction {
 
         return String.format("Added %s to the blacklist.", this.state.toString());
     }
+
+    @Override
+    public void undo () {
+
+        OreTiersAPI.unBlacklist(this.state);
+    }
+
+    @Override
+    public String describeUndo () {
+
+        return String.format("Removed %s from the blacklist.", this.state.toString());
+    }
 }

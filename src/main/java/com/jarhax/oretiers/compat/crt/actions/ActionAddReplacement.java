@@ -28,4 +28,16 @@ public class ActionAddReplacement extends BaseUndoableAction {
 
         return String.format("Adding a replacement to %s. %s will become %s", this.stage, this.original.toString(), this.replacement.toString());
     }
+
+    @Override
+    public void undo () {
+
+        OreTiersAPI.removeReplacement(this.original);
+    }
+
+    @Override
+    public String describeUndo () {
+
+        return String.format("Removed replacement %s from stage %s", this.original.toString(), this.stage);
+    }
 }

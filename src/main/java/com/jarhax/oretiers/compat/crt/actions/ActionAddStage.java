@@ -20,6 +20,18 @@ public class ActionAddStage extends BaseUndoableAction {
     @Override
     public String describe () {
 
-        return "Creating ore stage: " + this.stageName;
+        return String.format("Creating ore stage: %s", this.stageName);
+    }
+
+    @Override
+    public void undo () {
+
+        OreTiersAPI.removeStage(this.stageName);
+    }
+
+    @Override
+    public String describeUndo () {
+
+        return String.format("Removing ore stage: %s", this.stageName);
     }
 }

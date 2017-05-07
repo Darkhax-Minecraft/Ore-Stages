@@ -52,6 +52,16 @@ public final class OreTiersAPI {
     }
 
     /**
+     * Removes an OreStage.
+     *
+     * @param stageName The name of the stage to remove.
+     */
+    public static void removeStage (@Nonnull String stageName) {
+
+        STAGE_MAP.remove(stageName);
+    }
+
+    /**
      * Checks if a stage already exists.
      *
      * @param stageName The name of the stage.
@@ -116,6 +126,16 @@ public final class OreTiersAPI {
     }
 
     /**
+     * Removes a replacement state.
+     *
+     * @param state The state to remove.
+     */
+    public static void removeReplacement (IBlockState state) {
+
+        STATE_MAP.remove(state);
+    }
+
+    /**
      * Checks if a state has a replacement for it.
      *
      * @param stage The stage to check.
@@ -149,13 +169,23 @@ public final class OreTiersAPI {
     }
 
     /**
-     * Blacklists a state from the mod.
+     * Blacklists a state from the blacklist.
      *
      * @param state The block state to blacklist.
      */
     public static void blacklist (@Nonnull IBlockState state) {
 
         BLACKLIST.add(state);
+    }
+
+    /**
+     * Removes a state from the blacklist.
+     *
+     * @param state The block state to remove from the blacklist.
+     */
+    public static void unBlacklist (@Nonnull IBlockState state) {
+
+        BLACKLIST.remove(state);
     }
 
     /**

@@ -15,15 +15,4 @@ public abstract class BaseUndoableAction implements IUndoableAction {
 
         return null;
     }
-
-    @Override
-    public void undo () {
-
-    }
-
-    @Override
-    public String describeUndo () {
-
-        return "";
-    }
 }
