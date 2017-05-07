@@ -2,7 +2,7 @@ package com.jarhax.oretiers.proxy;
 
 import com.jarhax.oretiers.OreTiers;
 import com.jarhax.oretiers.api.PlayerDataHandler;
-import com.jarhax.oretiers.compat.crt.CompatCRT;
+import com.jarhax.oretiers.compat.crt.OreTiersCrT;
 import com.jarhax.oretiers.packet.PacketUnlockStage;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,6 +21,6 @@ public class ProxyCommon {
 
     public void onPostInit () {
 
-        CompatCRT.postInit();
+        OreTiersCrT.init();
     }
 }

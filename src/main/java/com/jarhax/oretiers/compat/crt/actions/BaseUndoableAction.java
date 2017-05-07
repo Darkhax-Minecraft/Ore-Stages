@@ -1,4 +1,4 @@
-package com.jarhax.oretiers.compat.crt.util;
+package com.jarhax.oretiers.compat.crt.actions;
 
 import minetweaker.IUndoableAction;
 
@@ -11,6 +11,12 @@ public abstract class BaseUndoableAction implements IUndoableAction {
     }
 
     @Override
+    public Object getOverrideKey () {
+
+        return null;
+    }
+
+    @Override
     public void undo () {
 
     }
@@ -19,11 +25,5 @@ public abstract class BaseUndoableAction implements IUndoableAction {
     public String describeUndo () {
 
         return "";
-    }
-
-    @Override
-    public Object getOverrideKey () {
-
-        return null;
     }
 }
