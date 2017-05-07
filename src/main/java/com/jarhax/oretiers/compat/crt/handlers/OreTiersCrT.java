@@ -3,7 +3,7 @@ package com.jarhax.oretiers.compat.crt.handlers;
 import com.jarhax.oretiers.api.OreTiersAPI;
 import com.jarhax.oretiers.compat.crt.util.BaseUndoableAction;
 import minetweaker.MineTweakerAPI;
-import minetweaker.api.item.IItemStack;
+import minetweaker.api.item.*;
 import minetweaker.mc1112.block.MCBlockDefinition;
 import net.minecraft.block.state.IBlockState;
 import stanhebben.zenscript.annotations.*;
@@ -31,38 +31,43 @@ public class OreTiersCrT {
     }
     
     @ZenMethod
-    public static void addReplacement(String name, IItemStack original, IItemStack replacement) {
-        IBlockState origin = ((MCBlockDefinition) original.asBlock().getDefinition()).getInternalBlock().getStateFromMeta(original.getDamage());
+    public static void addReplacement(String name, IIngredient original, IItemStack replacement) {
         IBlockState replace = ((MCBlockDefinition) replacement.asBlock().getDefinition()).getInternalBlock().getStateFromMeta(replacement.getDamage());
         MineTweakerAPI.apply(new BaseUndoableAction() {
             @Override
             public void apply() {
-                if(!OreTiersAPI.hasReplacement(name, origin)) {
-                    OreTiersAPI.addReplacement(name, origin, replace);
-                }
+                original.getItems().forEach(item -> {
+                    IBlockState origin = ((MCBlockDefinition) item.asBlock().getDefinition()).getInternalBlock().getStateFromMeta(item.getDamage());
+                    if(!OreTiersAPI.hasReplacement(name, origin)) {
+                        OreTiersAPI.addReplacement(name, origin, replace);
+                    }
+                });
             }
             
             @Override
             public String describe() {
-                return "Adding replacement: " + name + "    " + origin + " -> " + replace;
+                return "Adding replacement: " + name + "    " + original + " -> " + replace;
             }
         });
     }
     
     @ZenMethod
-    public static void blacklist(IItemStack state) {
-        IBlockState block = ((MCBlockDefinition)state.asBlock().getDefinition()).getInternalBlock(). getStateFromMeta(state.getDamage());
+    public static void blacklist(IIngredient state) {
         MineTweakerAPI.apply(new BaseUndoableAction() {
             @Override
             public void apply() {
-                if(!OreTiersAPI.isBlacklisted(block)){
-                    OreTiersAPI.blacklist(block);
-                }
+                state.getItems().forEach(item -> {
+                    IBlockState block = ((MCBlockDefinition) item.asBlock().getDefinition()).getInternalBlock().getStateFromMeta(item.getDamage());
+                    if(!OreTiersAPI.isBlacklisted(block)) {
+                        OreTiersAPI.blacklist(block);
+                    }
+                });
+                
             }
     
             @Override
             public String describe() {
-                return "Adding " + block + " to the blacklist";
+                return "Adding " + state + " to the blacklist";
             }
         });
     }
