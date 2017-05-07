@@ -1,5 +1,7 @@
 package com.jarhax.oretiers;
 
+import org.apache.logging.log4j.Logger;
+
 import com.jarhax.oretiers.proxy.ProxyCommon;
 
 import net.darkhax.bookshelf.network.NetworkHandler;
@@ -16,9 +18,12 @@ public class OreTiers {
     public static ProxyCommon proxy;
 
     public static NetworkHandler network = new NetworkHandler("oretiers");
+    public static Logger log;
 
     @Mod.EventHandler
     public void preInit (FMLPreInitializationEvent ev) {
+
+        log = ev.getModLog();
 
         proxy.onPreInit();
     }
