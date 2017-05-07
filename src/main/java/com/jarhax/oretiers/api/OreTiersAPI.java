@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import com.jarhax.oretiers.OreTiers;
 
 import net.minecraft.block.Block;
@@ -38,7 +40,7 @@ public final class OreTiersAPI {
      * @param stageName The name of the stage to create.
      * @return The newly created stage.
      */
-    public static OreStage createStage (String stageName) {
+    public static OreStage createStage (@Nonnull String stageName) {
 
         if (stageExists(stageName)) {
 
@@ -55,7 +57,7 @@ public final class OreTiersAPI {
      * @param stageName The name of the stage.
      * @return Whether or not the stage exists.
      */
-    public static boolean stageExists (String stageName) {
+    public static boolean stageExists (@Nonnull String stageName) {
 
         return STAGE_MAP.containsKey(stageName);
     }
@@ -66,7 +68,7 @@ public final class OreTiersAPI {
      * @param stage The stage you want to get.
      * @return The OreStage associated with the passed tier.
      */
-    public static OreStage getStage (String stage) {
+    public static OreStage getStage (@Nonnull String stage) {
 
         return STAGE_MAP.get(stage);
     }
@@ -80,7 +82,7 @@ public final class OreTiersAPI {
      * @param replacement The replacement block.
      * @param replacementMeta The replacement block meta.
      */
-    public static void addReplacement (String stage, Block original, int originalMeta, Block replacement, int replacementMeta) {
+    public static void addReplacement (@Nonnull String stage, @Nonnull Block original, int originalMeta, @Nonnull Block replacement, int replacementMeta) {
 
         addReplacement(stage, original.getStateFromMeta(originalMeta), replacement.getStateFromMeta(replacementMeta));
     }
@@ -92,7 +94,7 @@ public final class OreTiersAPI {
      * @param original The original block.
      * @param replacement The block to replace it with.
      */
-    public static void addReplacement (String stage, Block original, Block replacement) {
+    public static void addReplacement (@Nonnull String stage, @Nonnull Block original, @Nonnull Block replacement) {
 
         addReplacement(stage, original.getDefaultState(), replacement.getDefaultState());
     }
@@ -104,7 +106,7 @@ public final class OreTiersAPI {
      * @param original The original block state.
      * @param replacement The state to replace it with.
      */
-    public static void addReplacement (String stage, IBlockState original, IBlockState replacement) {
+    public static void addReplacement (@Nonnull String stage, @Nonnull IBlockState original, @Nonnull IBlockState replacement) {
 
         if (hasReplacement(original))
             OreTiers.log.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", stage, original.toString()));
@@ -119,7 +121,7 @@ public final class OreTiersAPI {
      * @param state The state to check for.
      * @return Whether or not the state has a replacement.
      */
-    public static boolean hasReplacement (IBlockState state) {
+    public static boolean hasReplacement (@Nonnull IBlockState state) {
 
         return STATE_MAP.containsKey(state);
     }
@@ -130,7 +132,7 @@ public final class OreTiersAPI {
      * @param block The block to blacklist.
      * @param meta The meta of the block.
      */
-    public static void blacklist (Block block, int meta) {
+    public static void blacklist (@Nonnull Block block, int meta) {
 
         blacklist(block.getStateFromMeta(meta));
     }
@@ -140,7 +142,7 @@ public final class OreTiersAPI {
      *
      * @param block The block to blacklist.
      */
-    public static void blacklist (Block block) {
+    public static void blacklist (@Nonnull Block block) {
 
         blacklist(block.getDefaultState());
     }
@@ -150,7 +152,7 @@ public final class OreTiersAPI {
      *
      * @param state The block state to blacklist.
      */
-    public static void blacklist (IBlockState state) {
+    public static void blacklist (@Nonnull IBlockState state) {
 
         BLACKLIST.add(state);
     }
@@ -161,7 +163,7 @@ public final class OreTiersAPI {
      * @param state The state to check.
      * @return Whether or not the state was blacklisted.
      */
-    public static boolean isBlacklisted (IBlockState state) {
+    public static boolean isBlacklisted (@Nonnull IBlockState state) {
 
         return BLACKLIST.contains(state);
     }
@@ -172,7 +174,7 @@ public final class OreTiersAPI {
      * @param player The player to unlock the stage for.
      * @param stage The stage to unlock.
      */
-    public static void unlockStage (EntityPlayer player, String stage) {
+    public static void unlockStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
 
         PlayerDataHandler.getHandler(player).unlockStage(stage);
     }
@@ -184,7 +186,7 @@ public final class OreTiersAPI {
      * @param stage The stage to check for.
      * @return Whether or not the player has the stage.
      */
-    public static boolean hasStage (EntityPlayer player, String stage) {
+    public static boolean hasStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
 
         return PlayerDataHandler.getHandler(player).hasUnlockedStage(stage);
     }
