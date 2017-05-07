@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jarhax.oretiers.OreTiers;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,7 +40,35 @@ public final class OreTiersAPI {
      */
     public static OreStage createStage (String stageName) {
 
+        if (stageExists(stageName)) {
+
+            OreTiers.log.info("Attempted to create stage %s however a stage with this name already exists!");
+            return STAGE_MAP.get(stageName);
+        }
+
         return STAGE_MAP.put(stageName, new OreStage(stageName));
+    }
+
+    /**
+     * Checks if a stage already exists.
+     *
+     * @param stageName The name of the stage.
+     * @return Whether or not the stage exists.
+     */
+    public static boolean stageExists (String stageName) {
+
+        return STAGE_MAP.containsKey(stageName);
+    }
+
+    /**
+     * Gets an OreStage reference by it's name.
+     *
+     * @param stage The stage you want to get.
+     * @return The OreStage associated with the passed tier.
+     */
+    public static OreStage getStage (String stage) {
+
+        return STAGE_MAP.get(stage);
     }
 
     /**
@@ -76,6 +106,9 @@ public final class OreTiersAPI {
      */
     public static void addReplacement (String stage, IBlockState original, IBlockState replacement) {
 
+        if (hasReplacement(original))
+            OreTiers.log.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", stage, original.toString()));
+
         STATE_MAP.put(original, new Tuple<>(stage, replacement));
     }
 
@@ -89,17 +122,6 @@ public final class OreTiersAPI {
     public static boolean hasReplacement (IBlockState state) {
 
         return STATE_MAP.containsKey(state);
-    }
-
-    /**
-     * Gets an OreStage reference by it's name.
-     *
-     * @param stage The stage you want to get.
-     * @return The OreStage associated with the passed tier.
-     */
-    public static OreStage getStage (String stage) {
-
-        return STAGE_MAP.get(stage);
     }
 
     /**
