@@ -43,7 +43,7 @@ public class OreTiersCrT {
 
                 original.getItems().forEach(item -> {
                     final IBlockState origin = ((MCBlockDefinition) item.asBlock().getDefinition()).getInternalBlock().getStateFromMeta(item.getDamage());
-                    if (!OreTiersAPI.hasReplacement(name, origin))
+                    if (!OreTiersAPI.hasReplacement(origin))
                         OreTiersAPI.addReplacement(name, origin, replace);
                 });
             }

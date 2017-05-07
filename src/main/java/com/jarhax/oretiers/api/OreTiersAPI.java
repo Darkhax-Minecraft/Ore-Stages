@@ -8,6 +8,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.Tuple;
 
 public final class OreTiersAPI {
 
@@ -15,6 +16,11 @@ public final class OreTiersAPI {
      * A map which links every stage, by name to an OreStage object.
      */
     public static final Map<String, OreStage> STAGE_MAP = new HashMap<>();
+
+    /**
+     * A map which links block states to their stage key.
+     */
+    public static final Map<IBlockState, Tuple<String, IBlockState>> STATE_MAP = new HashMap<>();
 
     /**
      * A list of blocks which should be skipped completely by our system. This can be used for
@@ -70,7 +76,7 @@ public final class OreTiersAPI {
      */
     public static void addReplacement (String stage, IBlockState original, IBlockState replacement) {
 
-        getStage(stage).addReplacement(original, replacement);
+        STATE_MAP.put(original, new Tuple<>(stage, replacement));
     }
 
     /**
@@ -80,21 +86,9 @@ public final class OreTiersAPI {
      * @param state The state to check for.
      * @return Whether or not the state has a replacement.
      */
-    public static boolean hasReplacement (String stage, IBlockState state) {
+    public static boolean hasReplacement (IBlockState state) {
 
-        return getStage(stage).hasReplacement(state);
-    }
-
-    /**
-     * Gets the replacement block state for a given state.
-     *
-     * @param stage The stage to grab from.
-     * @param state The state to get the replacement for.
-     * @return The replacement state for the passed state.
-     */
-    public static IBlockState getReplacement (String stage, IBlockState state) {
-
-        return getStage(stage).getReplacement(state);
+        return STATE_MAP.containsKey(state);
     }
 
     /**
