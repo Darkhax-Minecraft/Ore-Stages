@@ -3,24 +3,27 @@ package com.jarhax.oretiers.compat.crt.util;
 import minetweaker.IUndoableAction;
 
 public abstract class BaseUndoableAction implements IUndoableAction {
-    
+
     @Override
-    public boolean canUndo() {
+    public boolean canUndo () {
+
         return true;
     }
-    
+
     @Override
-    public void undo() {
-    
+    public void undo () {
+
     }
-    
+
     @Override
-    public String describeUndo() {
+    public String describeUndo () {
+
         return "";
     }
-    
+
     @Override
-    public Object getOverrideKey() {
+    public Object getOverrideKey () {
+
         return null;
     }
 }
