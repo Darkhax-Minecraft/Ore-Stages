@@ -17,8 +17,8 @@ public final class OreTiersAPI {
     public static final Map<String, OreStage> STAGE_MAP = new HashMap<>();
 
     /**
-     * A list of blocks which shouldn't be skipped completely by our system. This can be used
-     * for minor performance improvements (blacklisting stone and dirt), or to prevent any bugs
+     * A list of blocks which should be skipped completely by our system. This can be used for
+     * minor performance improvements (blacklisting stone and dirt), or to prevent any bugs
      * this mod may introduce. Not that the performance benefit of the blacklist is decreased
      * the more entries are added.
      */
