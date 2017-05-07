@@ -108,8 +108,9 @@ public final class OreTiersAPI {
      */
     public static void addReplacement (@Nonnull String stage, @Nonnull IBlockState original, @Nonnull IBlockState replacement) {
 
-        if (hasReplacement(original))
+        if (hasReplacement(original)) {
             OreTiers.log.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", stage, original.toString()));
+        }
 
         STATE_MAP.put(original, new Tuple<>(stage, replacement));
     }

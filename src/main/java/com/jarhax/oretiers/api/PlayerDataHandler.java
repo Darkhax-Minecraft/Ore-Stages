@@ -42,31 +42,35 @@ public class PlayerDataHandler {
 
         final NBTTagList tagList = tag.getTagList("UnlockedStages", NBT.TAG_STRING);
 
-        for (int index = 0; index < tagList.tagCount(); index++)
+        for (int index = 0; index < tagList.tagCount(); index++) {
             data.unlockStage(tagList.getStringTagAt(index));
+        }
     }
 
     public static void write (IOreData data, NBTTagCompound tag) {
 
         final NBTTagList tagList = new NBTTagList();
 
-        for (final String string : data.getUnlockedStages())
+        for (final String string : data.getUnlockedStages()) {
             tagList.appendTag(new NBTTagString(string));
+        }
 
         tag.setTag("UnlockedStages", tagList);
     }
 
     public static void clone (IOreData original, IOreData clone) {
 
-        for (final String stage : original.getUnlockedStages())
+        for (final String stage : original.getUnlockedStages()) {
             clone.unlockStage(stage);
+        }
     }
 
     @SubscribeEvent
     public void attachCapabilities (AttachCapabilitiesEvent<Entity> event) {
 
-        if (event.getObject() instanceof EntityPlayer)
+        if (event.getObject() instanceof EntityPlayer) {
             event.addCapability(new ResourceLocation("oretiers", "playerdata"), new Provider());
+        }
     }
 
     @SubscribeEvent
@@ -105,8 +109,9 @@ public class PlayerDataHandler {
         @Override
         public void unlockStage (String stage) {
 
-            if (!this.unlockedStages.contains(stage))
+            if (!this.unlockedStages.contains(stage)) {
                 this.unlockedStages.add(stage);
+            }
         }
     }
 

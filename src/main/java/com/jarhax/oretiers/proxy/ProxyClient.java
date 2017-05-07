@@ -34,12 +34,14 @@ public class ProxyClient extends ProxyCommon {
     @SubscribeEvent
     public void onBlockRender (RenderBlockEvent event) {
 
-        if (OreTiersAPI.isBlacklisted(event.getState()))
+        if (OreTiersAPI.isBlacklisted(event.getState())) {
             return;
+        }
 
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.STATE_MAP.get(event.getState());
 
-        if (stageInfo != null && !OreTiersAPI.hasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst()))
+        if (stageInfo != null && !OreTiersAPI.hasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
             event.setState(stageInfo.getSecond());
+        }
     }
 }
