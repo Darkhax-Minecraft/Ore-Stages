@@ -1,0 +1,4 @@
+#Commands
+commands.oretiers.stage.usage=orestage playername add|remove stagename
+commands.oretiers.stage.add=The ore stage %s has been unlocked!
+commands.oretiers.stage.remove=The ore stage %s was removed
