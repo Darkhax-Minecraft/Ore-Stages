@@ -88,6 +88,8 @@ public class PlayerDataHandler {
         boolean hasUnlockedStage (String stage);
 
         void unlockStage (String stage);
+
+        void lockStage (String stage);
     }
 
     public static class DefaultOreData implements IOreData {
@@ -112,6 +114,12 @@ public class PlayerDataHandler {
             if (!this.unlockedStages.contains(stage)) {
                 this.unlockedStages.add(stage);
             }
+        }
+
+        @Override
+        public void lockStage (String stage) {
+
+            this.unlockedStages.remove(stage);
         }
     }
 
