@@ -30,10 +30,20 @@ public class OreTiersCrT {
     }
 
     @ZenMethod
+    public static void addReplacement (String name, IIngredient original) {
+
+        addReplacement(name, original, Blocks.STONE.getDefaultState());
+    }
+
+    @ZenMethod
     public static void addReplacement (String name, IIngredient original, IItemStack replacement) {
 
+        addReplacement(name, original, getStateFromStack((ItemStack) replacement.getInternal()));
+    }
+
+    private static void addReplacement (String name, IIngredient original, IBlockState replacementState) {
+
         final Object internal = original.getInternal();
-        final IBlockState replacementState = getStateFromStack((ItemStack) replacement.getInternal());
 
         if (internal instanceof Block) {
             MineTweakerAPI.apply(new ActionAddReplacement(name, ((Block) internal).getDefaultState(), replacementState));
