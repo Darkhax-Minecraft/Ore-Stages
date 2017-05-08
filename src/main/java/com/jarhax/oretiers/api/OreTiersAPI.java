@@ -8,13 +8,17 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import com.jarhax.oretiers.OreTiers;
+import com.jarhax.oretiers.packet.PacketStage;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Tuple;
 
 public final class OreTiersAPI {
+
+    public static boolean requireReload = false;
 
     /**
      * A map which links every stage, by name to an OreStage object.
@@ -208,6 +212,27 @@ public final class OreTiersAPI {
     public static void unlockStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
 
         PlayerDataHandler.getHandler(player).unlockStage(stage);
+
+        if (player instanceof EntityPlayerMP) {
+
+            OreTiers.network.sendTo(new PacketStage(stage, true), (EntityPlayerMP) player);
+        }
+    }
+
+    /**
+     * Locks a stage for a player.
+     *
+     * @param player The player to lock the stage for.
+     * @param stage The stage to lcok.
+     */
+    public static void lockStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
+
+        PlayerDataHandler.getHandler(player).lockStage(stage);
+
+        if (player instanceof EntityPlayerMP) {
+
+            OreTiers.network.sendTo(new PacketStage(stage, false), (EntityPlayerMP) player);
+        }
     }
 
     /**
