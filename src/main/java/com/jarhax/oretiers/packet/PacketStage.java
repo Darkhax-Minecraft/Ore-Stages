@@ -4,6 +4,7 @@ import com.jarhax.oretiers.api.OreTiersAPI;
 
 import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
+import net.darkhax.bookshelf.util.RenderUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
@@ -61,7 +62,7 @@ public class PacketStage extends SerializableMessage {
             OreTiersAPI.lockStage(PlayerUtils.getClientPlayer(), this.stageName);
         }
 
-        OreTiersAPI.requireReload = true;
+        RenderUtils.markRenderersForReload(true);
         return null;
     }
 }

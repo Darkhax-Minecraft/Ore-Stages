@@ -20,9 +20,6 @@ import net.minecraft.util.Tuple;
 
 public final class OreTiersAPI {
 
-    // TOOD move to bookshelf
-    public static boolean requireReload = false;
-
     /**
      * A map which links every stage, by name to an OreStage object.
      */
