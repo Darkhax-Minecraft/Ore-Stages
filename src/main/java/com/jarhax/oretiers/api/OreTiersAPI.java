@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -24,6 +25,8 @@ public final class OreTiersAPI {
      * A map which links every stage, by name to an OreStage object.
      */
     public static final Map<String, OreStage> STAGE_MAP = new HashMap<>();
+
+    public static final List<IBlockState> states = new ArrayList<>();
 
     /**
      * A map which links block states to their stage key.
@@ -127,6 +130,9 @@ public final class OreTiersAPI {
         }
 
         STATE_MAP.put(original, new Tuple<>(stage, replacement));
+
+        addRelevantState(original);
+        addRelevantState(replacement);
     }
 
     /**
@@ -245,5 +251,18 @@ public final class OreTiersAPI {
     public static boolean hasStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
 
         return PlayerDataHandler.getHandler(player).hasUnlockedStage(stage);
+    }
+
+    public static Set<IBlockState> getStatesToReplace () {
+
+        return STATE_MAP.keySet();
+    }
+
+    private static void addRelevantState (IBlockState state) {
+
+        if (!states.contains(state)) {
+
+            states.add(state);
+        }
     }
 }
