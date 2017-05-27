@@ -43,14 +43,14 @@ public class OreTiersEventHandler {
             event.getModelRegistry().putObject(releventModels.get(state), new BakedModelTiered(stageInfo.getFirst(), originalModel, replacementModel));
         }
     }
-    
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onBlockBreak(BreakEvent event) {
-        
+    public void onBlockBreak (BreakEvent event) {
+
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
-        
+
         if (stageInfo != null && (event.getPlayer() == null || !OreTiersAPI.hasStage(event.getPlayer(), stageInfo.getFirst()))) {
-            
+
             event.setExpToDrop(0);
         }
     }
@@ -61,7 +61,9 @@ public class OreTiersEventHandler {
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
 
         if (stageInfo != null && (event.getHarvester() == null || !OreTiersAPI.hasStage(event.getHarvester(), stageInfo.getFirst()))) {
+
             event.getDrops().clear();
+            event.getDrops().addAll(stageInfo.getSecond().getBlock().getDrops(event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel()));
             event.setDropChance(ForgeEventFactory.fireBlockHarvesting(event.getDrops(), event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel(), event.getDropChance(), event.isSilkTouching(), event.getHarvester()));
         }
     }
