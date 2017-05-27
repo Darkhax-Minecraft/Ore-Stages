@@ -2,13 +2,14 @@ package com.jarhax.oretiers;
 
 import org.apache.logging.log4j.Logger;
 
+import com.jarhax.oretiers.api.OreTiersAPI;
 import com.jarhax.oretiers.api.PlayerDataHandler;
 import com.jarhax.oretiers.command.CommandStage;
 import com.jarhax.oretiers.compat.crt.OreTiersCrT;
-import com.jarhax.oretiers.handler.OreTiersEventHandler;
 import com.jarhax.oretiers.packet.PacketStage;
 
 import net.darkhax.bookshelf.network.NetworkHandler;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -29,6 +30,8 @@ public class OreTiers {
         network.register(PacketStage.class, Side.CLIENT);
         PlayerDataHandler.initialize();
         MinecraftForge.EVENT_BUS.register(new OreTiersEventHandler());
+
+        OreTiersAPI.addReplacement("test", Blocks.IRON_ORE.getDefaultState(), Blocks.STONE.getDefaultState());
     }
 
     @Mod.EventHandler

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.jarhax.oretiers.OreTiers;
 import com.jarhax.oretiers.packet.PacketStage;
@@ -19,19 +20,23 @@ import net.minecraft.util.Tuple;
 
 public final class OreTiersAPI {
 
+    // TOOD move to bookshelf
     public static boolean requireReload = false;
 
     /**
      * A map which links every stage, by name to an OreStage object.
      */
-    public static final Map<String, OreStage> STAGE_MAP = new HashMap<>();
+    private static final Map<String, OreStage> STAGE_MAP = new HashMap<>();
 
-    public static final List<IBlockState> states = new ArrayList<>();
+    /**
+     * A list of all relevant blockstates.
+     */
+    private static final List<IBlockState> RELEVANT_STATES = new ArrayList<>();
 
     /**
      * A map which links block states to their stage key.
      */
-    public static final Map<IBlockState, Tuple<String, IBlockState>> STATE_MAP = new HashMap<>();
+    private static final Map<IBlockState, Tuple<String, IBlockState>> STATE_MAP = new HashMap<>();
 
     /**
      * Creates a new OreStage and registers it.
@@ -193,16 +198,51 @@ public final class OreTiersAPI {
         return PlayerDataHandler.getHandler(player).hasUnlockedStage(stage);
     }
 
+    /**
+     * Gets a set of all states to be replaced/wrapped.
+     *
+     * @return A set of all the states to replace/wrap.
+     */
     public static Set<IBlockState> getStatesToReplace () {
 
         return STATE_MAP.keySet();
     }
 
-    private static void addRelevantState (IBlockState state) {
+    /**
+     * Gets a list of all the relevant blockstates. This is used internally for getting the
+     * list of models to wrap. See
+     * {@link com.jarhax.oretiers.OreTiersEventHandler#onModelBake(net.minecraftforge.client.event.ModelBakeEvent)}.
+     *
+     * @return A List of all the relevant states.
+     */
+    public static List<IBlockState> getRelevantStates () {
 
-        if (!states.contains(state)) {
+        return RELEVANT_STATES;
+    }
 
-            states.add(state);
+    /**
+     * Gets stage info from a blockstate.
+     *
+     * @param state The blockstate to get stage info for.
+     * @return The stage info for the passed state.
+     */
+    @Nullable
+    public static Tuple<String, IBlockState> getStageInfo (@Nonnull IBlockState state) {
+
+        return STATE_MAP.get(state);
+    }
+
+    /**
+     * Used internally add a relevant blockstate stage. Just a wrapper to prevent duplicate
+     * entries.
+     *
+     * @param state The blockstate to add.
+     */
+    private static void addRelevantState (@Nonnull IBlockState state) {
+
+        if (!RELEVANT_STATES.contains(state)) {
+
+            RELEVANT_STATES.add(state);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.jarhax.oretiers.handler;
+package com.jarhax.oretiers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class OreTiersEventHandler {
 
         for (final Map.Entry<IBlockState, ModelResourceLocation> entry : event.getModelManager().getBlockModelShapes().getBlockStateMapper().putAllStateModelLocations().entrySet()) {
 
-            if (OreTiersAPI.states.contains(entry.getKey())) {
+            if (OreTiersAPI.getRelevantStates().contains(entry.getKey())) {
 
                 releventModels.put(entry.getKey(), entry.getValue());
             }
@@ -38,7 +38,7 @@ public class OreTiersEventHandler {
 
         for (final IBlockState state : OreTiersAPI.getStatesToReplace()) {
 
-            final Tuple<String, IBlockState> stageInfo = OreTiersAPI.STATE_MAP.get(state);
+            final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(state);
             final IBakedModel originalModel = event.getModelRegistry().getObject(releventModels.get(state));
             final IBakedModel replacementModel = event.getModelRegistry().getObject(releventModels.get(stageInfo.getSecond()));
             event.getModelRegistry().putObject(releventModels.get(state), new BakedModelTiered(stageInfo.getFirst(), originalModel, replacementModel));
@@ -48,7 +48,7 @@ public class OreTiersEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onBlockDrops (HarvestDropsEvent event) {
 
-        final Tuple<String, IBlockState> stageInfo = OreTiersAPI.STATE_MAP.get(event.getState());
+        final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
 
         if (stageInfo != null && (event.getHarvester() == null || !OreTiersAPI.hasStage(event.getHarvester(), stageInfo.getFirst()))) {
             event.getDrops().clear();
