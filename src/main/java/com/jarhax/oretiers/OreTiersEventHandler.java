@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -40,6 +41,17 @@ public class OreTiersEventHandler {
             final IBakedModel originalModel = event.getModelRegistry().getObject(releventModels.get(state));
             final IBakedModel replacementModel = event.getModelRegistry().getObject(releventModels.get(stageInfo.getSecond()));
             event.getModelRegistry().putObject(releventModels.get(state), new BakedModelTiered(stageInfo.getFirst(), originalModel, replacementModel));
+        }
+    }
+    
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onBlockBreak(BreakEvent event) {
+        
+        final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
+        
+        if (stageInfo != null && (event.getPlayer() == null || !OreTiersAPI.hasStage(event.getPlayer(), stageInfo.getFirst()))) {
+            
+            event.setExpToDrop(0);
         }
     }
 
