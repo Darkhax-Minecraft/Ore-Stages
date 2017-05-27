@@ -34,14 +34,6 @@ public final class OreTiersAPI {
     public static final Map<IBlockState, Tuple<String, IBlockState>> STATE_MAP = new HashMap<>();
 
     /**
-     * A list of blocks which should be skipped completely by our system. This can be used for
-     * minor performance improvements (blacklisting stone and dirt), or to prevent any bugs
-     * this mod may introduce. Not that the performance benefit of the blacklist is decreased
-     * the more entries are added.
-     */
-    public static final List<IBlockState> BLACKLIST = new ArrayList<>();
-
-    /**
      * Creates a new OreStage and registers it.
      *
      * @param stageName The name of the stage to create.
@@ -155,58 +147,6 @@ public final class OreTiersAPI {
     public static boolean hasReplacement (@Nonnull IBlockState state) {
 
         return STATE_MAP.containsKey(state);
-    }
-
-    /**
-     * Blacklists a block from the mod.
-     *
-     * @param block The block to blacklist.
-     * @param meta The meta of the block.
-     */
-    public static void blacklist (@Nonnull Block block, int meta) {
-
-        blacklist(block.getStateFromMeta(meta));
-    }
-
-    /**
-     * Blacklists a block from the mod.
-     *
-     * @param block The block to blacklist.
-     */
-    public static void blacklist (@Nonnull Block block) {
-
-        blacklist(block.getDefaultState());
-    }
-
-    /**
-     * Blacklists a state from the blacklist.
-     *
-     * @param state The block state to blacklist.
-     */
-    public static void blacklist (@Nonnull IBlockState state) {
-
-        BLACKLIST.add(state);
-    }
-
-    /**
-     * Removes a state from the blacklist.
-     *
-     * @param state The block state to remove from the blacklist.
-     */
-    public static void unBlacklist (@Nonnull IBlockState state) {
-
-        BLACKLIST.remove(state);
-    }
-
-    /**
-     * Checks if a state has been blacklisted.
-     *
-     * @param state The state to check.
-     * @return Whether or not the state was blacklisted.
-     */
-    public static boolean isBlacklisted (@Nonnull IBlockState state) {
-
-        return BLACKLIST.contains(state);
     }
 
     /**

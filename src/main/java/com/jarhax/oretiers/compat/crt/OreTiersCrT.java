@@ -1,6 +1,5 @@
 package com.jarhax.oretiers.compat.crt;
 
-import com.jarhax.oretiers.compat.crt.actions.ActionAddBlacklist;
 import com.jarhax.oretiers.compat.crt.actions.ActionAddReplacement;
 import com.jarhax.oretiers.compat.crt.actions.ActionAddStage;
 
@@ -54,24 +53,6 @@ public class OreTiersCrT {
         else if (internal instanceof String) {
             for (final ItemStack stack : OreDictionary.getOres((String) internal)) {
                 MineTweakerAPI.apply(new ActionAddReplacement(name, getStateFromStack(stack), replacementState));
-            }
-        }
-    }
-
-    @ZenMethod
-    public static void blacklist (IIngredient state) {
-
-        final Object internal = state.getInternal();
-
-        if (internal instanceof Block) {
-            MineTweakerAPI.apply(new ActionAddBlacklist(((Block) internal).getDefaultState()));
-        }
-        else if (internal instanceof ItemStack) {
-            MineTweakerAPI.apply(new ActionAddBlacklist(getStateFromStack((ItemStack) internal)));
-        }
-        else if (internal instanceof String) {
-            for (final ItemStack stack : OreDictionary.getOres((String) internal)) {
-                MineTweakerAPI.apply(new ActionAddBlacklist(getStateFromStack(stack)));
             }
         }
     }

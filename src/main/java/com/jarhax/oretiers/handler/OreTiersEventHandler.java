@@ -48,10 +48,6 @@ public class OreTiersEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onBlockDrops (HarvestDropsEvent event) {
 
-        if (OreTiersAPI.isBlacklisted(event.getState())) {
-            return;
-        }
-
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.STATE_MAP.get(event.getState());
 
         if (stageInfo != null && (event.getHarvester() == null || !OreTiersAPI.hasStage(event.getHarvester(), stageInfo.getFirst()))) {
