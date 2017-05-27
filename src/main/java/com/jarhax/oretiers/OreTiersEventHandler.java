@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -52,6 +53,17 @@ public class OreTiersEventHandler {
         if (stageInfo != null && (event.getPlayer() == null || !OreTiersAPI.hasStage(event.getPlayer(), stageInfo.getFirst()))) {
 
             event.setExpToDrop(0);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onBreakSpeed (BreakSpeed event) {
+
+        final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
+
+        if (stageInfo != null && (event.getEntityPlayer() == null || !OreTiersAPI.hasStage(event.getEntityPlayer(), stageInfo.getFirst()))) {
+
+            // TODO Set the break speed
         }
     }
 
