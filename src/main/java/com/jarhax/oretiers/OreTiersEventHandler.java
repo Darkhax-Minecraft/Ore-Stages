@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.registry.IRegistry;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -21,6 +22,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class OreTiersEventHandler {
+
+    private static IRegistry modelRegistry = null;
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)

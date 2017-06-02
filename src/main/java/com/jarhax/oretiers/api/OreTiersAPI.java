@@ -10,20 +10,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.jarhax.oretiers.OreTiers;
-import com.jarhax.oretiers.packet.PacketStage;
 
+import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Tuple;
 
 public final class OreTiersAPI {
-
-    /**
-     * A map which links every stage, by name to an OreStage object.
-     */
-    private static final Map<String, OreStage> STAGE_MAP = new HashMap<>();
 
     /**
      * A list of all relevant blockstates.
@@ -33,56 +27,11 @@ public final class OreTiersAPI {
     /**
      * A map which links block states to their stage key.
      */
-    private static final Map<IBlockState, Tuple<String, IBlockState>> STATE_MAP = new HashMap<>();
+    public static final Map<IBlockState, Tuple<String, IBlockState>> STATE_MAP = new HashMap<>();
 
-    /**
-     * Creates a new OreStage and registers it.
-     *
-     * @param stageName The name of the stage to create.
-     * @return The newly created stage.
-     */
-    public static OreStage createStage (@Nonnull String stageName) {
-
-        if (stageExists(stageName)) {
-
-            OreTiers.log.info("Attempted to create stage %s however a stage with this name already exists!");
-            return STAGE_MAP.get(stageName);
-        }
-
-        return STAGE_MAP.put(stageName, new OreStage(stageName));
-    }
-
-    /**
-     * Removes an OreStage.
-     *
-     * @param stageName The name of the stage to remove.
-     */
-    public static void removeStage (@Nonnull String stageName) {
-
-        STAGE_MAP.remove(stageName);
-    }
-
-    /**
-     * Checks if a stage already exists.
-     *
-     * @param stageName The name of the stage.
-     * @return Whether or not the stage exists.
-     */
-    public static boolean stageExists (@Nonnull String stageName) {
-
-        return STAGE_MAP.containsKey(stageName);
-    }
-
-    /**
-     * Gets an OreStage reference by it's name.
-     *
-     * @param stage The stage you want to get.
-     * @return The OreStage associated with the passed tier.
-     */
-    public static OreStage getStage (@Nonnull String stage) {
-
-        return STAGE_MAP.get(stage);
-    }
+    private static boolean enableReload;
+    private static Map<IBlockState, Tuple<String, IBlockState>> STATE_CACHE = new HashMap<>();
+    private static final Map<IBlockState, Tuple<String, IBlockState>> KNOWN_DIFERENCES = new HashMap<>();
 
     /**
      * Adds a replacement for a block state.
@@ -119,8 +68,15 @@ public final class OreTiersAPI {
      */
     public static void addReplacement (@Nonnull String stage, @Nonnull IBlockState original, @Nonnull IBlockState replacement) {
 
+        System.out.println("Replacement Added for " + original.toString());
         if (hasReplacement(original)) {
+
             OreTiers.log.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", stage, original.toString()));
+        }
+
+        else if (enableReload) {
+
+            KNOWN_DIFERENCES.put(original, new Tuple<>(stage, replacement));
         }
 
         STATE_MAP.put(original, new Tuple<>(stage, replacement));
@@ -159,12 +115,7 @@ public final class OreTiersAPI {
      */
     public static void unlockStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
 
-        PlayerDataHandler.getHandler(player).unlockStage(stage);
-
-        if (player instanceof EntityPlayerMP) {
-
-            OreTiers.network.sendTo(new PacketStage(stage, true), (EntityPlayerMP) player);
-        }
+        PlayerDataHandler.getStageData(player).unlockStage(stage);
     }
 
     /**
@@ -175,12 +126,7 @@ public final class OreTiersAPI {
      */
     public static void lockStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
 
-        PlayerDataHandler.getHandler(player).lockStage(stage);
-
-        if (player instanceof EntityPlayerMP) {
-
-            OreTiers.network.sendTo(new PacketStage(stage, false), (EntityPlayerMP) player);
-        }
+        PlayerDataHandler.getStageData(player).lockStage(stage);
     }
 
     /**
@@ -192,7 +138,7 @@ public final class OreTiersAPI {
      */
     public static boolean hasStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
 
-        return PlayerDataHandler.getHandler(player).hasUnlockedStage(stage);
+        return PlayerDataHandler.getStageData(player).hasUnlockedStage(stage);
     }
 
     /**
@@ -241,5 +187,24 @@ public final class OreTiersAPI {
 
             RELEVANT_STATES.add(state);
         }
+    }
+
+    public static void enableReload () {
+
+        enableReload = true;
+        KNOWN_DIFERENCES.clear();
+        STATE_CACHE = new HashMap<>(STATE_MAP);
+    }
+
+    public static void disableReload () {
+
+        enableReload = false;
+        KNOWN_DIFERENCES.clear();
+        STATE_CACHE.clear();
+    }
+
+    public static Map<IBlockState, Tuple<String, IBlockState>> getKnownDiferences () {
+
+        return KNOWN_DIFERENCES;
     }
 }

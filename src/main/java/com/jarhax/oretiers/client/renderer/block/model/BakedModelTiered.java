@@ -5,6 +5,7 @@ import java.util.List;
 import com.jarhax.oretiers.api.OreTiersAPI;
 
 import net.darkhax.bookshelf.util.PlayerUtils;
+import net.darkhax.bookshelf.util.RenderUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -32,6 +33,11 @@ public class BakedModelTiered implements IBakedModel {
      * The model that should be displayed.
      */
     private final IBakedModel replacementModel;
+
+    public BakedModelTiered (String stage, IBlockState originalState, IBlockState replacementState) {
+
+        this(stage, RenderUtils.getModelForState(originalState), RenderUtils.getModelForState(replacementState));
+    }
 
     public BakedModelTiered (String stage, IBakedModel originalModel, IBakedModel replacementModel) {
 
@@ -90,5 +96,11 @@ public class BakedModelTiered implements IBakedModel {
     public ItemOverrideList getOverrides () {
 
         return this.getCorrectModel().getOverrides();
+    }
+
+    @Override
+    public String toString () {
+
+        return this.stage + " - " + this.originalModel.toString() + " - " + this.replacementModel.toString();
     }
 }

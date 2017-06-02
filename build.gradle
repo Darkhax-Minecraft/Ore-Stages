@@ -85,6 +85,7 @@ repositories {
 dependencies {
 
     deobfCompile "net.darkhax.bookshelf:Bookshelf:${version_minecraft}-${version_bookshelf}"
+    deobfCompile "net.darkhax.gamestages:GameStages-${version_minecraft}:${version_gamestages}"
     deobfCompile "MineTweaker3:MineTweaker3-MC1112-Main:1.11.2-${version_minetweaker}"
 }
 
