@@ -68,13 +68,12 @@ public final class OreTiersAPI {
      */
     public static void addReplacement (@Nonnull String stage, @Nonnull IBlockState original, @Nonnull IBlockState replacement) {
 
-        System.out.println("Replacement Added for " + original.toString());
         if (hasReplacement(original)) {
 
             OreTiers.log.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", stage, original.toString()));
         }
 
-        else if (enableReload) {
+        else if (!STATE_CACHE.containsKey(original) && enableReload) {
 
             KNOWN_DIFERENCES.put(original, new Tuple<>(stage, replacement));
         }
@@ -193,6 +192,7 @@ public final class OreTiersAPI {
 
         enableReload = true;
         KNOWN_DIFERENCES.clear();
+        STATE_CACHE.clear();
         STATE_CACHE = new HashMap<>(STATE_MAP);
     }
 
