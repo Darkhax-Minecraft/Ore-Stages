@@ -4,17 +4,22 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.jarhax.oretiers.api.OreTiersAPI;
+import com.jarhax.oretiers.client.renderer.block.model.BakedModelTiered;
 
 import minetweaker.MineTweakerAPI;
 import minetweaker.MineTweakerImplementationAPI;
 import minetweaker.MineTweakerImplementationAPI.ReloadEvent;
 import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
+import net.darkhax.bookshelf.util.GameUtils;
+import net.darkhax.bookshelf.util.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -24,18 +29,22 @@ public class OreTiersCrT {
 
     public static void init () {
 
-        System.out.println("Registering CRT stuff");
         MineTweakerAPI.registerClass(OreTiersCrT.class);
 
-        MineTweakerImplementationAPI.onReloadEvent( (e) -> preLoad(e));
-        MineTweakerImplementationAPI.onPostReload( (e) -> postLoad(e));
+        if (GameUtils.isClient()) {
+
+            MineTweakerImplementationAPI.onReloadEvent( (e) -> preLoad(e));
+            MineTweakerImplementationAPI.onPostReload( (e) -> postLoad(e));
+        }
     }
 
+    @SideOnly(Side.CLIENT)
     public static void preLoad (ReloadEvent event) {
 
         OreTiersAPI.enableReload();
     }
 
+    @SideOnly(Side.CLIENT)
     public static void postLoad (ReloadEvent event) {
 
         final Map<IBlockState, Tuple<String, IBlockState>> differences = OreTiersAPI.getKnownDiferences();
@@ -44,13 +53,16 @@ public class OreTiersCrT {
 
             for (final Entry<IBlockState, Tuple<String, IBlockState>> entry : differences.entrySet()) {
 
-                // System.out.println("Replacing " + entry.getKey().toString());
-                // OreTiers.NETWORK.sendToAll(new
-                // PacketReloadModels(entry.getValue().getFirst(), entry.getKey(),
-                // entry.getValue().getSecond()));
+                System.out.println(entry.getKey().toString());
+                RenderUtils.setModelForState(entry.getKey(), new BakedModelTiered(entry.getValue().getFirst(), entry.getKey(), entry.getValue().getSecond()));
             }
 
-            // OreTiers.NETWORK.sendToAll(new PacketRequestClientRefresh());
+            RenderUtils.markRenderersForReload(true);
+        }
+
+        else {
+
+            System.out.println("No differences");
         }
 
         OreTiersAPI.disableReload();
