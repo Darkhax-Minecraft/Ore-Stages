@@ -78,6 +78,11 @@ repositories {
     
     maven {
     
+        url 'http://tehnut.info/maven'
+    }
+    
+    maven {
+    
         url 'http://maven.blamejared.com'
     }
 }
@@ -87,6 +92,7 @@ dependencies {
     deobfCompile "net.darkhax.bookshelf:Bookshelf:${version_minecraft}-${version_bookshelf}"
     deobfCompile "net.darkhax.gamestages:GameStages-${version_minecraft}:${version_gamestages}"
     deobfCompile "MineTweaker3:MineTweaker3-MC1112-Main:1.11.2-${version_minetweaker}"
+    deobfCompile "mcp.mobius.waila:Hwyla:${version_hwyla}"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
