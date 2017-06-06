@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -29,8 +30,19 @@ public final class OreTiersAPI {
      */
     public static final Map<IBlockState, Tuple<String, IBlockState>> STATE_MAP = new HashMap<>();
 
+    /**
+     * A flag for whether or not the system is in reload mode.
+     */
     private static boolean enableReload;
-    private static Map<IBlockState, Tuple<String, IBlockState>> STATE_CACHE = new HashMap<>();
+
+    /**
+     * A temporary cache which holds state data before a reload happens.
+     */
+    private static Map<IBlockState, Tuple<String, IBlockState>> stateCache = new HashMap<>();
+
+    /**
+     * A temporary map of all the known changes.
+     */
     private static final Map<IBlockState, Tuple<String, IBlockState>> KNOWN_DIFERENCES = new HashMap<>();
 
     /**
@@ -73,7 +85,7 @@ public final class OreTiersAPI {
             OreTiers.log.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", stage, original.toString()));
         }
 
-        else if (!STATE_CACHE.containsKey(original) && enableReload) {
+        else if (!stateCache.containsKey(original) && enableReload) {
 
             KNOWN_DIFERENCES.put(original, new Tuple<>(stage, replacement));
         }
@@ -188,23 +200,66 @@ public final class OreTiersAPI {
         }
     }
 
+    /**
+     * Sets the API to reload mode. This will clear all the temporary data, and cache the
+     * current replacement data. While in reload mode, new additions will be logged.
+     */
     public static void enableReload () {
 
         enableReload = true;
         KNOWN_DIFERENCES.clear();
-        STATE_CACHE.clear();
-        STATE_CACHE = new HashMap<>(STATE_MAP);
+        stateCache.clear();
+        stateCache = new HashMap<>(STATE_MAP);
     }
 
+    /**
+     * Disables reload mode. This will clear all the temporary data, and disable logging of
+     * changes.
+     */
     public static void disableReload () {
 
         enableReload = false;
         KNOWN_DIFERENCES.clear();
-        STATE_CACHE.clear();
+        stateCache.clear();
     }
 
+    /**
+     * Gets all of the known additions from the last reload.
+     *
+     * @return A map of all the additions.
+     */
     public static Map<IBlockState, Tuple<String, IBlockState>> getKnownDiferences () {
 
         return KNOWN_DIFERENCES;
+    }
+
+    /**
+     * Gets all of the known removals from the last reload.
+     *
+     * @return A map of all the removals.
+     */
+    public static Map<IBlockState, Tuple<String, IBlockState>> getKnownRemovals () {
+
+        final Map<IBlockState, Tuple<String, IBlockState>> removals = new HashMap<>();
+
+        for (final Entry<IBlockState, Tuple<String, IBlockState>> entry : stateCache.entrySet()) {
+
+            if (!STATE_MAP.containsKey(entry.getKey())) {
+
+                removals.put(entry.getKey(), entry.getValue());
+            }
+
+            else {
+
+                final Tuple<String, IBlockState> replacement = STATE_MAP.get(entry.getKey());
+
+                if (!entry.getValue().getFirst().equals(replacement.getFirst()) || entry.getValue().getSecond() != replacement.getSecond()) {
+
+                    removals.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+
+        return removals;
     }
 }

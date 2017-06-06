@@ -15,6 +15,7 @@ import net.darkhax.bookshelf.util.GameUtils;
 import net.darkhax.bookshelf.util.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
@@ -47,22 +48,44 @@ public class OreTiersCrT {
     @SideOnly(Side.CLIENT)
     public static void postLoad (ReloadEvent event) {
 
+        boolean requireReload = false;
+
+        // Check to see what was removed by the CrT reload
+        final Map<IBlockState, Tuple<String, IBlockState>> removals = OreTiersAPI.getKnownRemovals();
+
+        if (!removals.isEmpty()) {
+
+            for (final Entry<IBlockState, Tuple<String, IBlockState>> entry : removals.entrySet()) {
+
+                final IBakedModel model = RenderUtils.getModelForState(entry.getKey());
+
+                if (model instanceof BakedModelTiered) {
+
+                    final BakedModelTiered tierModel = (BakedModelTiered) model;
+                    RenderUtils.setModelForState(entry.getKey(), tierModel.getOriginal());
+                }
+            }
+
+            requireReload = true;
+        }
+
+        // Check to see what was added by the CrT reload
         final Map<IBlockState, Tuple<String, IBlockState>> differences = OreTiersAPI.getKnownDiferences();
 
         if (!differences.isEmpty()) {
 
             for (final Entry<IBlockState, Tuple<String, IBlockState>> entry : differences.entrySet()) {
 
-                System.out.println(entry.getKey().toString());
                 RenderUtils.setModelForState(entry.getKey(), new BakedModelTiered(entry.getValue().getFirst(), entry.getKey(), entry.getValue().getSecond()));
             }
 
-            RenderUtils.markRenderersForReload(true);
+            requireReload = true;
         }
 
-        else {
+        // If any render changes happened, mark chunk renderers for reload.
+        if (requireReload) {
 
-            System.out.println("No differences");
+            RenderUtils.markRenderersForReload(true);
         }
 
         OreTiersAPI.disableReload();

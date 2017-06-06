@@ -56,6 +56,11 @@ public class BakedModelTiered implements IBakedModel {
         return OreTiersAPI.hasStage(PlayerUtils.getClientPlayer(), this.stage) ? this.originalModel : this.replacementModel;
     }
 
+    public IBakedModel getOriginal () {
+
+        return this.originalModel;
+    }
+
     @Override
     public List<BakedQuad> getQuads (IBlockState state, EnumFacing side, long rand) {
 
