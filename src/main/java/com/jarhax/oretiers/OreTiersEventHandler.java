@@ -56,7 +56,7 @@ public class OreTiersEventHandler {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onBreakSpeed (BreakSpeed event) {
 
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
