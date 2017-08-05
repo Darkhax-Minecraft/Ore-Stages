@@ -8,11 +8,11 @@ import com.google.common.collect.Lists;
 import com.jarhax.oretiers.api.OreTiersAPI;
 import com.jarhax.oretiers.client.renderer.block.model.BakedModelTiered;
 
-import minetweaker.MineTweakerAPI;
-import minetweaker.MineTweakerImplementationAPI;
-import minetweaker.MineTweakerImplementationAPI.ReloadEvent;
-import minetweaker.api.item.IIngredient;
-import minetweaker.api.item.IItemStack;
+import crafttweaker.CraftTweakerAPI;
+import crafttweaker.CrafttweakerImplementationAPI;
+import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IIngredient;
+import crafttweaker.api.item.IItemStack;
 import net.darkhax.bookshelf.util.GameUtils;
 import net.darkhax.bookshelf.util.RenderUtils;
 import net.minecraft.block.Block;
@@ -28,71 +28,9 @@ import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+@ZenRegister
 @ZenClass("mods.OreTiers")
 public class OreTiersCrT {
-
-    public static void init() {
-
-        MineTweakerAPI.registerClass(OreTiersCrT.class);
-
-        if (GameUtils.isClient()) {
-
-            MineTweakerImplementationAPI.onReloadEvent((e) -> preLoad(e));
-            MineTweakerImplementationAPI.onPostReload((e) -> postLoad(e));
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void preLoad(ReloadEvent event) {
-
-        OreTiersAPI.enableReload();
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void postLoad(ReloadEvent event) {
-
-        boolean requireReload = false;
-
-        // Check to see what was removed by the CrT reload
-        final Map<IBlockState, Tuple<String, IBlockState>> removals = OreTiersAPI.getKnownRemovals();
-
-        if (!removals.isEmpty()) {
-
-            for (final Entry<IBlockState, Tuple<String, IBlockState>> entry : removals.entrySet()) {
-
-                final IBakedModel model = RenderUtils.getModelForState(entry.getKey());
-
-                if (model instanceof BakedModelTiered) {
-
-                    final BakedModelTiered tierModel = (BakedModelTiered) model;
-                    RenderUtils.setModelForState(entry.getKey(), tierModel.getOriginal());
-                }
-            }
-
-            requireReload = true;
-        }
-
-        // Check to see what was added by the CrT reload
-        final Map<IBlockState, Tuple<String, IBlockState>> differences = OreTiersAPI.getKnownDiferences();
-
-        if (!differences.isEmpty()) {
-
-            for (final Entry<IBlockState, Tuple<String, IBlockState>> entry : differences.entrySet()) {
-
-                RenderUtils.setModelForState(entry.getKey(), new BakedModelTiered(entry.getValue().getFirst(), entry.getKey(), entry.getValue().getSecond()));
-            }
-
-            requireReload = true;
-        }
-
-        // If any render changes happened, mark chunk renderers for reload.
-        if (requireReload) {
-
-            RenderUtils.markRenderersForReload(true);
-        }
-
-        OreTiersAPI.disableReload();
-    }
 
     @ZenMethod
     public static void addReplacement(String name, IIngredient original) {
@@ -108,16 +46,17 @@ public class OreTiersCrT {
 
     private static void addReplacement(String name, IIngredient original, IBlockState replacementState) {
 
+        System.out.println("Adding CRT Replacement for " + original.toString());
         final Object internal = original.getInternal();
         if (internal instanceof Block) {
-            MineTweakerAPI.apply(new ActionAddReplacement(name, ((Block) internal).getDefaultState(), replacementState));
+            CraftTweakerAPI.apply(new ActionAddReplacement(name, ((Block) internal).getDefaultState(), replacementState));
         } else if (internal instanceof ItemStack) {
             List<IBlockState> states = getStatesFromStack((ItemStack) internal);
             for (IBlockState state : states)
-                MineTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
+                CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
         } else if (internal instanceof String) {
             for (final ItemStack stack : OreDictionary.getOres((String) internal)) {
-                MineTweakerAPI.apply(new ActionAddReplacement(name, getStateFromStack(stack), replacementState));
+                CraftTweakerAPI.apply(new ActionAddReplacement(name, getStateFromStack(stack), replacementState));
             }
         }
     }
