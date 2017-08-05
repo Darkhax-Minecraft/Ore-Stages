@@ -22,8 +22,8 @@ buildscript {
 
     dependencies {
 
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.0.7'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.0.9'
     }
 }
 
@@ -91,7 +91,7 @@ dependencies {
 
     deobfCompile "net.darkhax.bookshelf:Bookshelf:${version_minecraft}-${version_bookshelf}"
     deobfCompile "net.darkhax.gamestages:GameStages-${version_minecraft}:${version_gamestages}"
-    deobfCompile "MineTweaker3:MineTweaker3-MC1112-Main:1.11.2-${version_minetweaker}"
+    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${version_minetweaker}"
     deobfCompile "mcp.mobius.waila:Hwyla:${version_hwyla}"
 }
 
