@@ -78,6 +78,8 @@ public final class OreTiersAPI {
 
         addRelevantState(original);
         addRelevantState(replacement);
+        
+        REPLACEMENT_IDS.put(original.getBlock().getRegistryName().toString(), replacement.getBlock().getRegistryName().toString());
     }
 
     /**
