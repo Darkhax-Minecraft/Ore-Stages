@@ -106,9 +106,13 @@ public class OreTiersEventHandler {
 
                 final String line = iterator.next();
 
-                if (OreTiersAPI.REPLACEMENT_IDS.containsKey(line)) {
+                for (String string : OreTiersAPI.REPLACEMENT_IDS.keySet()) {
+                    
+                    if (line.equalsIgnoreCase(string)) {
 
-                    iterator.set(OreTiersAPI.REPLACEMENT_IDS.get(line));
+                        iterator.set(OreTiersAPI.REPLACEMENT_IDS.get(line));
+                        break;
+                    }
                 }
             }
         }
