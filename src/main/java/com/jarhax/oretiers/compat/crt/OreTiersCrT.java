@@ -55,12 +55,19 @@ public class OreTiersCrT {
     private static List<IBlockState> getStatesFromStack (ItemStack stack) {
 
         final Block block = Block.getBlockFromItem(stack.getItem());
+        
+        // Special case for redstone ore
+        if (block instanceof BlockRedstoneOre) {
+            
+            return Lists.newArrayList(Blocks.REDSTONE_ORE.getDefaultState(), Blocks.LIT_REDSTONE_ORE.getDefaultState());
+        }
+        
+        // Special case for wildcard meta
         if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE) {
-            if (block instanceof BlockRedstoneOre) {
-                return Lists.newArrayList(Blocks.REDSTONE_ORE.getDefaultState(), Blocks.LIT_REDSTONE_ORE.getDefaultState());
-            }
+
             return block.getBlockState().getValidStates();
         }
+        
         return Lists.newArrayList(getStateFromStack(stack));
     }
 
