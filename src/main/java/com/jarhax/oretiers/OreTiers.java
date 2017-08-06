@@ -39,30 +39,30 @@ public class OreTiers {
             FMLInterModComms.sendMessage("waila", "register", "com.jarhax.oretiers.compat.waila.OreTiersProvider.register");
         }
     }
-    
+
     @Mod.EventHandler
     @SideOnly(Side.CLIENT)
-    public void postInit(FMLPostInitializationEvent ev) {
-        
+    public void postInit (FMLPostInitializationEvent ev) {
+
         log.info("Loaded {} block replacements!", OreTiersAPI.STATE_MAP.size());
         log.info("Starting model wrapping for replacements.");
-        
+
         final Map<IBlockState, Tuple<String, IBlockState>> differences = OreTiersAPI.STATE_MAP;
-        
+
         if (!OreTiersAPI.STATE_MAP.isEmpty()) {
-            
+
             for (final Entry<IBlockState, Tuple<String, IBlockState>> entry : differences.entrySet()) {
-                
+
                 log.debug("Adding a wrapper model for {}", entry.getKey().toString());
                 RenderUtils.setModelForState(entry.getKey(), new BakedModelTiered(entry.getValue().getFirst(), entry.getKey(), entry.getValue().getSecond()));
             }
         }
-        
+
         else {
-            
+
             log.info("There are no replacements. Have you added them in a CrT script?");
         }
-        
+
         log.info("Model wrapping finished!");
     }
 }

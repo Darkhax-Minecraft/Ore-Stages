@@ -28,7 +28,7 @@ public final class OreTiersAPI {
      * A map which links block states to their stage key.
      */
     public static final Map<IBlockState, Tuple<String, IBlockState>> STATE_MAP = new HashMap<>();
-    
+
     /**
      * A map of all the replacement state ids.
      */
@@ -147,8 +147,8 @@ public final class OreTiersAPI {
     }
 
     /**
-     * Gets a list of all the relevant blockstates. This is used internally for getting the
-     * list of models to wrap. See
+     * Gets a list of all the relevant blockstates. This is used internally for getting the list of
+     * models to wrap. See
      * {@link com.jarhax.oretiers.OreTiersEventHandler#onModelBake(net.minecraftforge.client.event.ModelBakeEvent)}.
      *
      * @return A List of all the relevant states.
