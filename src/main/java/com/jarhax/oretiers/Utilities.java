@@ -14,7 +14,6 @@ public class Utilities {
         float speed = desiredBreakSpeed;
         speed *= currentHardness;
         speed *= canHarvest ? 30f : 100f;
-        System.out.println(speed);
         return speed;
     }
 

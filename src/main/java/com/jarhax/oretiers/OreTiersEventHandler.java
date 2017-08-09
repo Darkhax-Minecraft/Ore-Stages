@@ -73,7 +73,6 @@ public class OreTiersEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onHarvestCheck (HarvestCheck event) {
 
-        System.out.print("Event");
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getTargetBlock());
 
         if (stageInfo != null && (event.getEntityPlayer() == null || !OreTiersAPI.hasStage(event.getEntityPlayer(), stageInfo.getFirst()))) {
