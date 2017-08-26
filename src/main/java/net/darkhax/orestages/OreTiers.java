@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod(modid = "oretiers", name = "Ore Tiers", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.427,);required-after:gamestages@[1.0.19,);required-after:crafttweaker@[3.0.25.,)")
+@Mod(modid = "orestages", name = "Ore Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.428,);required-after:gamestages@[1.0.52,);required-after:crafttweaker@[3.0.25.,)")
 public class OreTiers {
 
     public static Logger log;
