@@ -1,4 +1,4 @@
-package com.jarhax.oretiers.api;
+package net.darkhax.orestages.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +9,8 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.jarhax.oretiers.OreTiers;
-
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.orestages.OreTiers;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -151,7 +150,7 @@ public final class OreTiersAPI {
     /**
      * Gets a list of all the relevant blockstates. This is used internally for getting the list of
      * models to wrap. See
-     * {@link com.jarhax.oretiers.OreTiersEventHandler#onModelBake(net.minecraftforge.client.event.ModelBakeEvent)}.
+     * {@link net.darkhax.orestages.OreTiersEventHandler#onModelBake(net.minecraftforge.client.event.ModelBakeEvent)}.
      *
      * @return A List of all the relevant states.
      */

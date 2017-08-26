@@ -1,8 +1,7 @@
-package com.jarhax.oretiers.compat.crt;
-
-import com.jarhax.oretiers.api.OreTiersAPI;
+package net.darkhax.orestages.compat.crt;
 
 import crafttweaker.IAction;
+import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 
 public class ActionAddReplacement implements IAction {

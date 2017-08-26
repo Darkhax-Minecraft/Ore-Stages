@@ -1,14 +1,13 @@
-package com.jarhax.oretiers;
+package net.darkhax.orestages;
 
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.logging.log4j.Logger;
 
-import com.jarhax.oretiers.api.OreTiersAPI;
-import com.jarhax.oretiers.client.renderer.block.model.BakedModelTiered;
-
 import net.darkhax.bookshelf.util.RenderUtils;
+import net.darkhax.orestages.api.OreTiersAPI;
+import net.darkhax.orestages.client.renderer.block.model.BakedModelTiered;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;

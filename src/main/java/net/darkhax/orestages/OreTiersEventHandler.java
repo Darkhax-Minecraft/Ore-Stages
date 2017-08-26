@@ -1,11 +1,10 @@
-package com.jarhax.oretiers;
+package net.darkhax.orestages;
 
 import java.util.ListIterator;
 
-import com.jarhax.oretiers.api.OreTiersAPI;
-
 import net.darkhax.bookshelf.util.RenderUtils;
 import net.darkhax.gamestages.event.GameStageEvent;
+import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Tuple;

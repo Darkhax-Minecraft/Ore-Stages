@@ -1,11 +1,10 @@
-package com.jarhax.oretiers.client.renderer.block.model;
+package net.darkhax.orestages.client.renderer.block.model;
 
 import java.util.List;
 
-import com.jarhax.oretiers.api.OreTiersAPI;
-
 import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.bookshelf.util.RenderUtils;
+import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;

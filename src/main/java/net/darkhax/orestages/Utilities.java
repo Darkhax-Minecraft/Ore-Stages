@@ -1,4 +1,4 @@
-package com.jarhax.oretiers;
+package net.darkhax.orestages;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

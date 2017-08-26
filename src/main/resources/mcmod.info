@@ -1,8 +1,8 @@
 [
 {
-  "modid": "sevtechores",
-  "name": "SevTech-Ores",
-  "description": "Adds tiered material generation.",
+  "modid": "orestages",
+  "name": "Ore Stages",
+  "description": "Allows for blocks to be gated into various progression stages.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
