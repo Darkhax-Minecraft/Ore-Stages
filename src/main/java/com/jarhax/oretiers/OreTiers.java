@@ -6,11 +6,9 @@ import java.util.Map.Entry;
 import org.apache.logging.log4j.Logger;
 
 import com.jarhax.oretiers.api.OreTiersAPI;
-import com.jarhax.oretiers.api.StageDataHandler;
 import com.jarhax.oretiers.client.renderer.block.model.BakedModelTiered;
 
 import net.darkhax.bookshelf.util.RenderUtils;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,7 +20,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod(modid = "oretiers", name = "Ore Tiers", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.0.0.380,);required-after:crafttweaker@[3.0.25.,)")
+@Mod(modid = "oretiers", name = "Ore Tiers", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.427,);required-after:gamestages@[1.0.19,);required-after:crafttweaker@[3.0.25.,)")
 public class OreTiers {
 
     public static Logger log;
@@ -32,7 +30,6 @@ public class OreTiers {
 
         log = ev.getModLog();
         MinecraftForge.EVENT_BUS.register(new OreTiersEventHandler());
-        PlayerDataHandler.registerDataHandler("oretiers", new StageDataHandler());
 
         if (Loader.isModLoaded("waila")) {
 

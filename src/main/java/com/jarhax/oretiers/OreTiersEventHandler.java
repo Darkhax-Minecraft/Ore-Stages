@@ -1,18 +1,15 @@
 package com.jarhax.oretiers;
 
-import java.util.HashMap;
 import java.util.ListIterator;
-import java.util.Map;
 
 import com.jarhax.oretiers.api.OreTiersAPI;
-import com.jarhax.oretiers.client.renderer.block.model.BakedModelTiered;
 
+import net.darkhax.bookshelf.util.RenderUtils;
+import net.darkhax.gamestages.event.GameStageEvent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -27,25 +24,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class OreTiersEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onBlockHighlight (DrawBlockHighlightEvent event) {
+
+    }
+
+    public void drawHiglight () {
+
+    }
+
+    @SubscribeEvent()
     @SideOnly(Side.CLIENT)
-    public void onModelBake (ModelBakeEvent event) {
+    public void onStageSync (GameStageEvent.ClientSync event) {
 
-        final Map<IBlockState, ModelResourceLocation> releventModels = new HashMap<>();
-
-        for (final Map.Entry<IBlockState, ModelResourceLocation> entry : event.getModelManager().getBlockModelShapes().getBlockStateMapper().putAllStateModelLocations().entrySet()) {
-
-            if (OreTiersAPI.getRelevantStates().contains(entry.getKey())) {
-
-                releventModels.put(entry.getKey(), entry.getValue());
-            }
-        }
-
-        for (final IBlockState state : OreTiersAPI.getStatesToReplace()) {
-            final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(state);
-            final IBakedModel originalModel = event.getModelRegistry().getObject(releventModels.get(state));
-            final IBakedModel replacementModel = event.getModelRegistry().getObject(releventModels.get(stageInfo.getSecond()));
-            event.getModelRegistry().putObject(releventModels.get(state), new BakedModelTiered(stageInfo.getFirst(), originalModel, replacementModel));
-        }
+        RenderUtils.markRenderersForReload(true);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -105,8 +96,8 @@ public class OreTiersEventHandler {
 
                 final String line = iterator.next();
 
-                for (String string : OreTiersAPI.REPLACEMENT_IDS.keySet()) {
-                    
+                for (final String string : OreTiersAPI.REPLACEMENT_IDS.keySet()) {
+
                     if (line.equalsIgnoreCase(string)) {
 
                         iterator.set(OreTiersAPI.REPLACEMENT_IDS.get(line));
