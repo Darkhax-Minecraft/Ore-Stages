@@ -23,22 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class OreTiersEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onBlockHighlight (DrawBlockHighlightEvent event) {
-
-    }
-
-    public void drawHiglight () {
-
-    }
-
-    @SubscribeEvent()
-    @SideOnly(Side.CLIENT)
-    public void onStageSync (GameStageEvent.ClientSync event) {
-
-        RenderUtils.markRenderersForReload(true);
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onBlockBreak (BreakEvent event) {
 
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
@@ -84,7 +68,15 @@ public class OreTiersEventHandler {
         }
     }
 
+    @SubscribeEvent()
+    @SideOnly(Side.CLIENT)
+    public void onStageSync (GameStageEvent.ClientSync event) {
+
+        RenderUtils.markRenderersForReload(true);
+    }
+    
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public void onOverlayRendered (RenderGameOverlayEvent.Text event) {
 
         final Minecraft mc = Minecraft.getMinecraft();
@@ -105,5 +97,11 @@ public class OreTiersEventHandler {
                 }
             }
         }
+    }
+    
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SideOnly(Side.CLIENT)
+    public void onBlockHighlight (DrawBlockHighlightEvent event) {
+
     }
 }
