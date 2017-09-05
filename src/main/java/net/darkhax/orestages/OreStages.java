@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod(modid = "orestages", name = "Ore Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.431,);required-after:gamestages@[1.0.52,);required-after:crafttweaker@[3.0.25.,)", certificateFingerprint = "@FINGERPRINT@")
-public class OreTiers {
+public class OreStages {
 
     public static Logger log;
 

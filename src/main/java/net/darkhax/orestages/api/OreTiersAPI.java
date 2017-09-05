@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
-import net.darkhax.orestages.OreTiers;
+import net.darkhax.orestages.OreStages;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,7 +70,7 @@ public final class OreTiersAPI {
 
         if (hasReplacement(original)) {
 
-            OreTiers.log.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", stage, original.toString()));
+            OreStages.log.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", stage, original.toString()));
         }
 
         STATE_MAP.put(original, new Tuple<>(stage, replacement));
