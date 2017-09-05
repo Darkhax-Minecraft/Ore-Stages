@@ -13,13 +13,15 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod(modid = "orestages", name = "Ore Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.428,);required-after:gamestages@[1.0.52,);required-after:crafttweaker@[3.0.25.,)")
+@Mod(modid = "orestages", name = "Ore Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.431,);required-after:gamestages@[1.0.52,);required-after:crafttweaker@[3.0.25.,)", certificateFingerprint = "@FINGERPRINT@")
 public class OreTiers {
 
     public static Logger log;
@@ -60,5 +62,12 @@ public class OreTiers {
         }
 
         log.info("Model wrapping finished!");
+    }
+    
+    
+    @EventHandler
+    public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
+        
+        log.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
     }
 }
