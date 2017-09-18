@@ -2,17 +2,20 @@ package net.darkhax.orestages;
 
 import java.util.ListIterator;
 
+import net.darkhax.bookshelf.util.BlockUtils;
 import net.darkhax.bookshelf.util.RenderUtils;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
-import net.minecraftforge.event.entity.player.PlayerEvent.HarvestCheck;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -36,22 +39,19 @@ public class OreTiersEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onBreakSpeed (BreakSpeed event) {
 
-        final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
+        try {
 
-        if (stageInfo != null && (event.getEntityPlayer() == null || !OreTiersAPI.hasStage(event.getEntityPlayer(), stageInfo.getFirst()))) {
+            final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
 
-            event.setNewSpeed(Utilities.getModifiedBreakSpeed(Utilities.getBlockStrengthSafely(event.getOriginalSpeed(), event.getState(), event.getEntityPlayer(), event.getEntityPlayer().world, event.getPos()), event.getState().getBlockHardness(event.getEntityPlayer().world, event.getPos()), Utilities.getCanHarvestSafely(stageInfo.getSecond(), event.getEntityPlayer())));
+            if (stageInfo != null && (event.getEntityPlayer() == null || !OreTiersAPI.hasStage(event.getEntityPlayer(), stageInfo.getFirst()))) {
+
+                event.setNewSpeed(BlockUtils.getBreakSpeedToMatch(event.getState(), stageInfo.getSecond(), event.getEntityPlayer().world, event.getEntityPlayer(), event.getPos()));
+            }
         }
-    }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onHarvestCheck (HarvestCheck event) {
+        catch (final Exception e) {
 
-        final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getTargetBlock());
-
-        if (stageInfo != null && (event.getEntityPlayer() == null || !OreTiersAPI.hasStage(event.getEntityPlayer(), stageInfo.getFirst()))) {
-
-            event.setCanHarvest(Utilities.getCanHarvestSafely(stageInfo.getSecond(), event.getEntityPlayer()));
+            OreStages.LOG.trace("Error calculating mining speed!", e);
         }
     }
 
@@ -74,7 +74,7 @@ public class OreTiersEventHandler {
 
         RenderUtils.markRenderersForReload(true);
     }
-    
+
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onOverlayRendered (RenderGameOverlayEvent.Text event) {
@@ -98,7 +98,7 @@ public class OreTiersEventHandler {
             }
         }
     }
-    
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void onBlockHighlight (DrawBlockHighlightEvent event) {
