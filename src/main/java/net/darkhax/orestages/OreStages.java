@@ -20,11 +20,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod(modid = "orestages", name = "Ore Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.431,);required-after:gamestages@[1.0.52,);required-after:crafttweaker@[3.0.25.,)", certificateFingerprint = "@FINGERPRINT@")
+@Mod(modid = "orestages", name = "Ore Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.441,);required-after:gamestages@[1.0.52,);required-after:crafttweaker@[3.0.25.,)", certificateFingerprint = "@FINGERPRINT@")
 public class OreStages {
 
     public static final LoggingHelper LOG = new LoggingHelper("Ore Stages");
-    
+
     @Mod.EventHandler
     public void preInit (FMLPreInitializationEvent ev) {
 
@@ -61,11 +61,10 @@ public class OreStages {
 
         LOG.info("Model wrapping finished!");
     }
-    
-    
+
     @EventHandler
-    public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
-        
+    public void onFingerprintViolation (FMLFingerprintViolationEvent event) {
+
         LOG.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
     }
 }
