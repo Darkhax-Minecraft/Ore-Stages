@@ -57,7 +57,7 @@ public class OreTiersCrT {
         final Block block = Block.getBlockFromItem(stack.getItem());
 
         // Special case for redstone ore
-        if (block instanceof BlockRedstoneOre) {
+        if (block == Blocks.REDSTONE_ORE) {
 
             return Lists.newArrayList(Blocks.REDSTONE_ORE.getDefaultState(), Blocks.LIT_REDSTONE_ORE.getDefaultState());
         }
