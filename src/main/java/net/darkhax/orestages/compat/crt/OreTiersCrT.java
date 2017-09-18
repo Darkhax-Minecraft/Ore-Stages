@@ -9,7 +9,6 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -36,30 +35,30 @@ public class OreTiersCrT {
     private static void addReplacement (String name, IIngredient original, IBlockState replacementState) {
 
         final Object internal = original.getInternal();
-        
+
         if (internal instanceof Block) {
-            
+
             CraftTweakerAPI.apply(new ActionAddReplacement(name, ((Block) internal).getDefaultState(), replacementState));
         }
-        
+
         else if (internal instanceof ItemStack) {
-            
+
             final List<IBlockState> states = getStatesFromStack((ItemStack) internal);
-            
+
             for (final IBlockState state : states) {
-                
+
                 CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
             }
         }
-        
+
         else if (internal instanceof String) {
-            
+
             for (final ItemStack stack : OreDictionary.getOres((String) internal)) {
-                
+
                 final List<IBlockState> states = getStatesFromStack(stack);
-                
+
                 for (final IBlockState state : states) {
-                    
+
                     CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
                 }
             }
