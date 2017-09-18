@@ -36,18 +36,32 @@ public class OreTiersCrT {
     private static void addReplacement (String name, IIngredient original, IBlockState replacementState) {
 
         final Object internal = original.getInternal();
+        
         if (internal instanceof Block) {
+            
             CraftTweakerAPI.apply(new ActionAddReplacement(name, ((Block) internal).getDefaultState(), replacementState));
         }
+        
         else if (internal instanceof ItemStack) {
+            
             final List<IBlockState> states = getStatesFromStack((ItemStack) internal);
+            
             for (final IBlockState state : states) {
+                
                 CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
             }
         }
+        
         else if (internal instanceof String) {
+            
             for (final ItemStack stack : OreDictionary.getOres((String) internal)) {
-                CraftTweakerAPI.apply(new ActionAddReplacement(name, getStateFromStack(stack), replacementState));
+                
+                final List<IBlockState> states = getStatesFromStack(stack);
+                
+                for (final IBlockState state : states) {
+                    
+                    CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
+                }
             }
         }
     }
