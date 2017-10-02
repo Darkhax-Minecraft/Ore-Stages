@@ -8,6 +8,7 @@ import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
+import net.darkhax.orestages.OreStages;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -34,34 +35,42 @@ public class OreTiersCrT {
 
     private static void addReplacement (String name, IIngredient original, IBlockState replacementState) {
 
-        final Object internal = original.getInternal();
+        try {
+          
+            final Object internal = original.getInternal();
 
-        if (internal instanceof Block) {
+            if (internal instanceof Block) {
 
-            CraftTweakerAPI.apply(new ActionAddReplacement(name, ((Block) internal).getDefaultState(), replacementState));
-        }
-
-        else if (internal instanceof ItemStack) {
-
-            final List<IBlockState> states = getStatesFromStack((ItemStack) internal);
-
-            for (final IBlockState state : states) {
-
-                CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
+                CraftTweakerAPI.apply(new ActionAddReplacement(name, ((Block) internal).getDefaultState(), replacementState));
             }
-        }
 
-        else if (internal instanceof String) {
+            else if (internal instanceof ItemStack) {
 
-            for (final ItemStack stack : OreDictionary.getOres((String) internal)) {
-
-                final List<IBlockState> states = getStatesFromStack(stack);
+                final List<IBlockState> states = getStatesFromStack((ItemStack) internal);
 
                 for (final IBlockState state : states) {
 
                     CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
                 }
             }
+
+            else if (internal instanceof String) {
+
+                for (final ItemStack stack : OreDictionary.getOres((String) internal)) {
+
+                    final List<IBlockState> states = getStatesFromStack(stack);
+
+                    for (final IBlockState state : states) {
+
+                        CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
+                    }
+                }
+            }
+        }
+        
+        catch (Exception e) {
+            
+            OreStages.LOG.catching(e);
         }
     }
 
