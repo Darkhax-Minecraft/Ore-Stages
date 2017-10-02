@@ -32,7 +32,7 @@ public class OreStages {
 
         if (Loader.isModLoaded("waila")) {
 
-            FMLInterModComms.sendMessage("waila", "register", "com.jarhax.oretiers.compat.waila.OreTiersProvider.register");
+            FMLInterModComms.sendMessage("waila", "register", "net.darkhax.orestages.compat.waila.OreTiersProvider.register");
         }
     }
 
