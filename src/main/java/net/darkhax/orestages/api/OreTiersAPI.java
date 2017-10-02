@@ -70,7 +70,7 @@ public final class OreTiersAPI {
 
         if (hasReplacement(original)) {
 
-            OreStages.LOG.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", stage, original.toString()));
+            OreStages.LOG.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", original.toString(), stage));
         }
 
         STATE_MAP.put(original, new Tuple<>(stage, replacement));
