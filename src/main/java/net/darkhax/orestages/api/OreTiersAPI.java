@@ -14,6 +14,8 @@ import net.darkhax.orestages.OreStages;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.util.Tuple;
 
 public final class OreTiersAPI {
@@ -71,6 +73,12 @@ public final class OreTiersAPI {
         if (hasReplacement(original)) {
 
             OreStages.LOG.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", original.toString(), stage));
+        }
+        
+        if (original.getBlock() == Blocks.AIR) {
+            
+            Item nullItem = null;
+            nullItem.getRegistryName();
         }
 
         STATE_MAP.put(original, new Tuple<>(stage, replacement));
