@@ -148,8 +148,8 @@ public final class OreTiersAPI {
     }
 
     /**
-     * Gets a list of all the relevant blockstates. This is used internally for getting the list of
-     * models to wrap. See
+     * Gets a list of all the relevant blockstates. This is used internally for
+     * getting the list of models to wrap. See
      * {@link net.darkhax.orestages.OreTiersEventHandler#onModelBake(net.minecraftforge.client.event.ModelBakeEvent)}.
      *
      * @return A List of all the relevant states.
@@ -172,8 +172,8 @@ public final class OreTiersAPI {
     }
 
     /**
-     * Used internally add a relevant blockstate stage. Just a wrapper to prevent duplicate
-     * entries.
+     * Used internally add a relevant blockstate stage. Just a wrapper to prevent
+     * duplicate entries.
      *
      * @param state The blockstate to add.
      */

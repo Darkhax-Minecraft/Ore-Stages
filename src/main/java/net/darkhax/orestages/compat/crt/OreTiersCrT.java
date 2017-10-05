@@ -12,6 +12,7 @@ import net.darkhax.orestages.OreStages;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -24,53 +25,84 @@ public class OreTiersCrT {
     @ZenMethod
     public static void addReplacement (String name, IIngredient original) {
 
+        checkBadIngredient(original);
         addReplacement(name, original, Blocks.STONE.getDefaultState());
     }
 
     @ZenMethod
     public static void addReplacement (String name, IIngredient original, IItemStack replacement) {
 
+        checkBadIngredient(original);
         addReplacement(name, original, getStateFromStack((ItemStack) replacement.getInternal()));
+    }
+
+    private static void checkBadIngredient (IIngredient ingredient) {
+
+        if (ingredient == null) {
+
+            throw new RuntimeException("Ingredient is null!");
+        }
+
+        else if (ingredient.getInternal() == Items.AIR || ingredient.getInternal() == Blocks.AIR) {
+
+            throw new RuntimeException("Ingredient was air!");
+        }
+
+        else if (ingredient.getInternal() instanceof ItemStack && ((ItemStack) ingredient.getInternal()).isEmpty()) {
+
+            throw new RuntimeException("Ingredient was an empty stack!");
+        }
+
+        else if (ingredient.getInternal() instanceof String) {
+
+            boolean broken = false;
+
+            for (final ItemStack stack : OreDictionary.getOres((String) ingredient.getInternal())) {
+
+                if (stack.isEmpty()) {
+
+                    OreStages.LOG.error("Found an empty oredict entry for " + ingredient.getInternal());
+                    broken = true;
+                }
+            }
+
+            if (broken) {
+
+                throw new RuntimeException("Ore Dictionary Ingredient contains empty entries!");
+            }
+        }
     }
 
     private static void addReplacement (String name, IIngredient original, IBlockState replacementState) {
 
-        try {
-          
-            final Object internal = original.getInternal();
+        final Object internal = original.getInternal();
 
-            if (internal instanceof Block) {
+        if (internal instanceof Block) {
 
-                CraftTweakerAPI.apply(new ActionAddReplacement(name, ((Block) internal).getDefaultState(), replacementState));
+            CraftTweakerAPI.apply(new ActionAddReplacement(name, ((Block) internal).getDefaultState(), replacementState));
+        }
+
+        else if (internal instanceof ItemStack) {
+
+            final List<IBlockState> states = getStatesFromStack((ItemStack) internal);
+
+            for (final IBlockState state : states) {
+
+                CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
             }
+        }
 
-            else if (internal instanceof ItemStack) {
+        else if (internal instanceof String) {
 
-                final List<IBlockState> states = getStatesFromStack((ItemStack) internal);
+            for (final ItemStack stack : OreDictionary.getOres((String) internal)) {
+
+                final List<IBlockState> states = getStatesFromStack(stack);
 
                 for (final IBlockState state : states) {
 
                     CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
                 }
             }
-
-            else if (internal instanceof String) {
-
-                for (final ItemStack stack : OreDictionary.getOres((String) internal)) {
-
-                    final List<IBlockState> states = getStatesFromStack(stack);
-
-                    for (final IBlockState state : states) {
-
-                        CraftTweakerAPI.apply(new ActionAddReplacement(name, state, replacementState));
-                    }
-                }
-            }
-        }
-        
-        catch (Exception e) {
-            
-            OreStages.LOG.catching(e);
         }
     }
 
