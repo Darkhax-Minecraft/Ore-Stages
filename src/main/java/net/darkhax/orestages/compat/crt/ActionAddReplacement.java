@@ -3,95 +3,87 @@ package net.darkhax.orestages.compat.crt;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
 import crafttweaker.IAction;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
-import net.darkhax.orestages.OreStages;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ActionAddReplacement implements IAction {
 
-    private final String crtStage;
-    private final IIngredient crtOriginal;
-    private final IItemStack crtReplacement;
+    private final String stage;   
+    private final List<IBlockState> originals;
+    private final List<IBlockState> replacements;
     
-    private List<IBlockState> originals;
-    private IBlockState replacement;
-    
-    public ActionAddReplacement(String name, IIngredient original) {
+    public ActionAddReplacement(String stage, IIngredient original) {
         
-        this(name, original, null);
+        this(stage, original, null);
     }
     
-    public ActionAddReplacement(String name, IIngredient original, IItemStack replacement) {
+    public ActionAddReplacement(String stage, IIngredient original, IItemStack replacement) {
         
-        checkBadIngredient(original);
-        
-        this.crtStage = name;
-        this.crtOriginal = original;
-        this.crtReplacement = replacement;
-        this.originals = new ArrayList<>();
-        
-        getOriginals(this.crtOriginal);
-        this.replacement = this.crtReplacement != null ? getStateFromStack((ItemStack) this.crtReplacement.getInternal()) : Blocks.STONE.getDefaultState();
+        this(stage, getStatesFromIngredient(original), (replacement != null ? getStatesFromStack(CraftTweakerMC.getItemStack(replacement)) : Arrays.asList(Blocks.STONE.getDefaultState())));
     }
-
+    
+    public ActionAddReplacement(String stage, List<IBlockState> originals, List<IBlockState> replacements) {
+    	
+    	this.stage = stage;
+    	this.originals = originals;
+    	this.replacements = replacements;
+    }
 
     @Override
     public void apply () {
         
+    	if (this.originals.isEmpty()) {
+    		
+    		throw new IllegalArgumentException("No valid blocks to replace!");
+    	}
+    	
+    	if (this.replacements.isEmpty()) {
+    		
+    		throw new IllegalArgumentException("No valid blocks to replace with!");
+    	}
+    	
         for (IBlockState original : originals) {
             
-            OreTiersAPI.addReplacement(this.crtStage, original, this.replacement);
+        	for (IBlockState replacement : replacements) {
+        		
+                OreTiersAPI.addReplacement(this.stage, original, replacement);
+        	}
         }
     }
 
     @Override
     public String describe () {
 
-        return String.format("Adding a replacement for stage %s. %s will become %s", this.crtStage, Arrays.toString(this.originals.toArray(new IBlockState[0])), this.replacement.toString());
+        return String.format("Adding a replacement for stage %s. %s will become %s", this.stage, listToString(this.originals), listToString(this.replacements));
     }
     
-    private void getOriginals (IIngredient original) {
+    private static String listToString(List<?> list) {
+    	
+    	return list.stream().map(Object::toString).collect(Collectors.joining(", "));
+    }
+    
+    private static List<IBlockState> getStatesFromIngredient (IIngredient original) {
 
-        final Object internal = original.getInternal();
-
-        if (internal instanceof Block) {
-
-            this.originals.add(((Block) internal).getDefaultState());
-        }
-
-        else if (internal instanceof ItemStack) {
-
-            final List<IBlockState> states = getStatesFromStack((ItemStack) internal);
-
-            for (final IBlockState state : states) {
-
-                this.originals.add(state);
-            }
-        }
-
-        else if (internal instanceof String) {
-
-            for (final ItemStack stack : OreDictionary.getOres((String) internal)) {
-
-                final List<IBlockState> states = getStatesFromStack(stack);
-
-                for (final IBlockState state : states) {
-
-                    this.originals.add(state);
-                }
-            }
-        }
+    	final List<IBlockState> states = new ArrayList<>();
+    	
+    	for (ItemStack stack : CraftTweakerMC.getItemStacks(original.getItems())) {
+    		
+    		states.addAll(getStatesFromStack(stack));
+    	}
+    	
+    	return states;
     }
     
     private static List<IBlockState> getStatesFromStack (ItemStack stack) {
@@ -117,43 +109,5 @@ public class ActionAddReplacement implements IAction {
 
         final Block block = Block.getBlockFromItem(stack.getItem());
         return block != null ? block.getStateFromMeta(stack.getMetadata()) : Blocks.STONE.getDefaultState();
-    }
-    
-
-    private static void checkBadIngredient (IIngredient ingredient) {
-
-        if (ingredient == null) {
-
-            throw new RuntimeException("Ingredient is null!");
-        }
-
-        else if (ingredient.getInternal() == Items.AIR || ingredient.getInternal() == Blocks.AIR) {
-
-            throw new RuntimeException("Ingredient was air!");
-        }
-
-        else if (ingredient.getInternal() instanceof ItemStack && ((ItemStack) ingredient.getInternal()).isEmpty()) {
-
-            throw new RuntimeException("Ingredient was an empty stack!");
-        }
-
-        else if (ingredient.getInternal() instanceof String) {
-
-            boolean broken = false;
-
-            for (final ItemStack stack : OreDictionary.getOres((String) ingredient.getInternal())) {
-
-                if (stack.isEmpty()) {
-
-                    OreStages.LOG.error("Found an empty oredict entry for " + ingredient.getInternal());
-                    broken = true;
-                }
-            }
-
-            if (broken) {
-
-                throw new RuntimeException("Ore Dictionary Ingredient contains empty entries!");
-            }
-        }
     }
 }
