@@ -9,7 +9,6 @@ import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Tuple;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -59,6 +58,7 @@ public class OreTiersEventHandler {
 
         if (stageInfo != null && (event.getHarvester() == null || !OreTiersAPI.hasStage(event.getHarvester(), stageInfo.getFirst()))) {
 
+            // System.out.println("Checking: " + event.getState().toString());
             event.getDrops().clear();
             event.getDrops().addAll(stageInfo.getSecond().getBlock().getDrops(event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel()));
             event.setDropChance(ForgeEventFactory.fireBlockHarvesting(event.getDrops(), event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel(), event.getDropChance(), event.isSilkTouching(), event.getHarvester()));
@@ -94,11 +94,5 @@ public class OreTiersEventHandler {
                 }
             }
         }
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    @SideOnly(Side.CLIENT)
-    public void onBlockHighlight (DrawBlockHighlightEvent event) {
-
     }
 }
