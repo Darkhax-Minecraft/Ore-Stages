@@ -14,8 +14,6 @@ import net.darkhax.orestages.OreStages;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.util.Tuple;
 
 public final class OreTiersAPI {
@@ -73,12 +71,6 @@ public final class OreTiersAPI {
         if (hasReplacement(original)) {
 
             OreStages.LOG.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", original.toString(), stage));
-        }
-        
-        if (original.getBlock() == Blocks.AIR) {
-            
-            Item nullItem = null;
-            nullItem.getRegistryName();
         }
 
         STATE_MAP.put(original, new Tuple<>(stage, replacement));
@@ -156,8 +148,8 @@ public final class OreTiersAPI {
     }
 
     /**
-     * Gets a list of all the relevant blockstates. This is used internally for
-     * getting the list of models to wrap. See
+     * Gets a list of all the relevant blockstates. This is used internally for getting the
+     * list of models to wrap. See
      * {@link net.darkhax.orestages.OreTiersEventHandler#onModelBake(net.minecraftforge.client.event.ModelBakeEvent)}.
      *
      * @return A List of all the relevant states.
@@ -180,8 +172,8 @@ public final class OreTiersAPI {
     }
 
     /**
-     * Used internally add a relevant blockstate stage. Just a wrapper to prevent
-     * duplicate entries.
+     * Used internally add a relevant blockstate stage. Just a wrapper to prevent duplicate
+     * entries.
      *
      * @param state The blockstate to add.
      */
