@@ -25,51 +25,51 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ActionAddReplacement implements IAction {
 
-    private final String stage;   
+    private final String stage;
     private final List<IBlockState> originals;
     private final List<IBlockState> replacements;
-    
-    public ActionAddReplacement(String stage, String original, String replacement) {
-    	
-    	this(stage, getState(original), getState(replacement));
+
+    public ActionAddReplacement (String stage, String original, String replacement) {
+
+        this(stage, getState(original), getState(replacement));
     }
-    
-    public ActionAddReplacement(String stage, IIngredient original) {
-        
+
+    public ActionAddReplacement (String stage, IIngredient original) {
+
         this(stage, original, null);
     }
-    
-    public ActionAddReplacement(String stage, IIngredient original, IItemStack replacement) {
-        
-        this(stage, getStatesFromIngredient(original), (replacement != null ? getStatesFromStack(CraftTweakerMC.getItemStack(replacement)) : Arrays.asList(Blocks.STONE.getDefaultState())));
+
+    public ActionAddReplacement (String stage, IIngredient original, IItemStack replacement) {
+
+        this(stage, getStatesFromIngredient(original), replacement != null ? getStatesFromStack(CraftTweakerMC.getItemStack(replacement)) : Arrays.asList(Blocks.STONE.getDefaultState()));
     }
-    
-    public ActionAddReplacement(String stage, List<IBlockState> originals, List<IBlockState> replacements) {
-    	
-    	this.stage = stage;
-    	this.originals = originals;
-    	this.replacements = replacements;
+
+    public ActionAddReplacement (String stage, List<IBlockState> originals, List<IBlockState> replacements) {
+
+        this.stage = stage;
+        this.originals = originals;
+        this.replacements = replacements;
     }
 
     @Override
     public void apply () {
-        
-    	if (this.originals.isEmpty()) {
-    		
-    		throw new IllegalArgumentException("No valid blocks to replace!");
-    	}
-    	
-    	if (this.replacements.isEmpty()) {
-    		
-    		throw new IllegalArgumentException("No valid blocks to replace with!");
-    	}
-    	
-        for (IBlockState original : originals) {
-            
-        	for (IBlockState replacement : replacements) {
-        		
+
+        if (this.originals.isEmpty()) {
+
+            throw new IllegalArgumentException("No valid blocks to replace!");
+        }
+
+        if (this.replacements.isEmpty()) {
+
+            throw new IllegalArgumentException("No valid blocks to replace with!");
+        }
+
+        for (final IBlockState original : this.originals) {
+
+            for (final IBlockState replacement : this.replacements) {
+
                 OreTiersAPI.addReplacement(this.stage, original, replacement);
-        	}
+            }
         }
     }
 
@@ -78,24 +78,24 @@ public class ActionAddReplacement implements IAction {
 
         return String.format("Adding a replacement for stage %s. %s will become %s", this.stage, listToString(this.originals), listToString(this.replacements));
     }
-    
-    private static String listToString(List<?> list) {
-    	
-    	return list.stream().map(Object::toString).collect(Collectors.joining(", "));
+
+    private static String listToString (List<?> list) {
+
+        return list.stream().map(Object::toString).collect(Collectors.joining(", "));
     }
-    
+
     private static List<IBlockState> getStatesFromIngredient (IIngredient original) {
 
-    	final List<IBlockState> states = new ArrayList<>();
-    	
-    	for (ItemStack stack : CraftTweakerMC.getItemStacks(original.getItems())) {
-    		
-    		states.addAll(getStatesFromStack(stack));
-    	}
-    	
-    	return states;
+        final List<IBlockState> states = new ArrayList<>();
+
+        for (final ItemStack stack : CraftTweakerMC.getItemStacks(original.getItems())) {
+
+            states.addAll(getStatesFromStack(stack));
+        }
+
+        return states;
     }
-    
+
     private static List<IBlockState> getStatesFromStack (ItemStack stack) {
 
         final Block block = Block.getBlockFromItem(stack.getItem());
@@ -120,67 +120,67 @@ public class ActionAddReplacement implements IAction {
         final Block block = Block.getBlockFromItem(stack.getItem());
         return block != null ? block.getStateFromMeta(stack.getMetadata()) : Blocks.STONE.getDefaultState();
     }
-    
-    private static NonNullList<IBlockState> getState(String string) {
-    	
-    	final NonNullList<IBlockState> states = NonNullList.create();
-    	
-    	final String[] parts = string.split(":");
-    	
-    	// Only two or 3 arguments is valid.
-    	if (parts.length < 2 || parts.length > 3) {
-    		
-    		throw new IllegalArgumentException("Invalid block ID. Format is modid:blockid:meta The meta is optional!");
-    	}
-    	
-    	// Gets block and checks if it is valid
-    	final Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(parts[0], parts[1]));
-    	
-    	if (block == null) {
-    		
-    		throw new IllegalArgumentException("No block found for " + parts[0] + ":" + parts[1]);
-    	}
-    	
-    	int meta = 0;
-    	
-    	// Check if meta arg exists
-    	if (parts.length == 3) {
-    		
-    		// Handles non integer strings
-    		if (!NumberUtils.isCreatable(parts[2])) {
-    			
-        		// Convert * to the wildcard meta
-        		if ("*".equalsIgnoreCase(parts[2])) {
-        			
-        			meta = OreDictionary.WILDCARD_VALUE;
-        		}
-        		
-        		// Not a valid argument
-        		else {
-        			
-        			throw new IllegalArgumentException("Invalid meta for " + string + ". " + parts[2] + " is not a valid meta!");
-        		}
-    		}
-    		
-    		// Converts meta string to integer
-    		else {
-    			
-    			meta = Integer.parseInt(parts[2]);
-    		}
-    	}
-    	
-    	// If wildcard, add all valid states.
-    	if (meta == OreDictionary.WILDCARD_VALUE) {
-    		
-    		states.addAll(block.getBlockState().getValidStates());
-    	}
-    	
-    	// Add just the requested state.
-    	else {
-    		
-    		states.add(block.getStateFromMeta(meta));
-    	}
-    	
-    	return states;
+
+    private static NonNullList<IBlockState> getState (String string) {
+
+        final NonNullList<IBlockState> states = NonNullList.create();
+
+        final String[] parts = string.split(":");
+
+        // Only two or 3 arguments is valid.
+        if (parts.length < 2 || parts.length > 3) {
+
+            throw new IllegalArgumentException("Invalid block ID. Format is modid:blockid:meta The meta is optional!");
+        }
+
+        // Gets block and checks if it is valid
+        final Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(parts[0], parts[1]));
+
+        if (block == null) {
+
+            throw new IllegalArgumentException("No block found for " + parts[0] + ":" + parts[1]);
+        }
+
+        int meta = 0;
+
+        // Check if meta arg exists
+        if (parts.length == 3) {
+
+            // Handles non integer strings
+            if (!NumberUtils.isCreatable(parts[2])) {
+
+                // Convert * to the wildcard meta
+                if ("*".equalsIgnoreCase(parts[2])) {
+
+                    meta = OreDictionary.WILDCARD_VALUE;
+                }
+
+                // Not a valid argument
+                else {
+
+                    throw new IllegalArgumentException("Invalid meta for " + string + ". " + parts[2] + " is not a valid meta!");
+                }
+            }
+
+            // Converts meta string to integer
+            else {
+
+                meta = Integer.parseInt(parts[2]);
+            }
+        }
+
+        // If wildcard, add all valid states.
+        if (meta == OreDictionary.WILDCARD_VALUE) {
+
+            states.addAll(block.getBlockState().getValidStates());
+        }
+
+        // Add just the requested state.
+        else {
+
+            states.add(block.getStateFromMeta(meta));
+        }
+
+        return states;
     }
 }

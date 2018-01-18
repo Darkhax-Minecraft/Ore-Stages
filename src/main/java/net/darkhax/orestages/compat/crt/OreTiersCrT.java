@@ -22,10 +22,10 @@ public class OreTiersCrT {
 
         CraftTweakerAPI.apply(new ActionAddReplacement(stage, original, replacement));
     }
-    
+
     @ZenMethod
-    public static void addReplacementById(String stage, String original, String replacement) {
-    	
-    	CraftTweakerAPI.apply(new ActionAddReplacement(stage, original, replacement));
+    public static void addReplacementById (String stage, String original, String replacement) {
+
+        CraftTweakerAPI.apply(new ActionAddReplacement(stage, original, replacement));
     }
 }
