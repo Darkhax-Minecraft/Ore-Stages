@@ -26,8 +26,10 @@ public class OreTiersEventHandler {
 
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
 
+        // Checks if the block has a stage and the player is not valid to break it.
         if (stageInfo != null && (event.getPlayer() == null || !OreTiersAPI.hasStage(event.getPlayer(), stageInfo.getFirst()))) {
 
+            // Sets the EXP to drop to 0
             event.setExpToDrop(0);
         }
     }
@@ -39,8 +41,10 @@ public class OreTiersEventHandler {
 
             final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
 
+            // Checks if the block has a stage and the player is not valid to break it.
             if (stageInfo != null && (event.getEntityPlayer() == null || !OreTiersAPI.hasStage(event.getEntityPlayer(), stageInfo.getFirst()))) {
 
+                // Sets the new break speed to match the replacement block
                 event.setNewSpeed(BlockUtils.getBreakSpeedToMatch(event.getState(), stageInfo.getSecond(), event.getEntityPlayer().world, event.getEntityPlayer(), event.getPos()));
             }
         }
@@ -56,11 +60,14 @@ public class OreTiersEventHandler {
 
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
 
+        // Checks if the block has a stage and the player is not valid to break it.
         if (stageInfo != null && (event.getHarvester() == null || !OreTiersAPI.hasStage(event.getHarvester(), stageInfo.getFirst()))) {
 
-            // System.out.println("Checking: " + event.getState().toString());
+            // Clear the drop list and add the correct drops
             event.getDrops().clear();
             event.getDrops().addAll(stageInfo.getSecond().getBlock().getDrops(event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel()));
+
+            // Reset the drop chance
             event.setDropChance(ForgeEventFactory.fireBlockHarvesting(event.getDrops(), event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel(), event.getDropChance(), event.isSilkTouching(), event.getHarvester()));
         }
     }
@@ -69,6 +76,7 @@ public class OreTiersEventHandler {
     @SideOnly(Side.CLIENT)
     public void onStageSync (GameStageEvent.ClientSync event) {
 
+        // Reload chunk renderers for the player
         RenderUtils.markRenderersForReload(true);
     }
 
@@ -78,16 +86,20 @@ public class OreTiersEventHandler {
 
         final Minecraft mc = Minecraft.getMinecraft();
 
+        // Checks if the F3 menu is open
         if (mc.gameSettings.showDebugInfo && event.getRight() != null) {
 
+            // Iterates through the debug menu
             for (final ListIterator<String> iterator = event.getRight().listIterator(); iterator.hasNext();) {
 
                 final String line = iterator.next();
 
                 for (final String string : OreTiersAPI.REPLACEMENT_IDS.keySet()) {
 
+                    // Checks if the ID is a hidden ID
                     if (line.equalsIgnoreCase(string)) {
 
+                        // Replaces the block id with the hidden ID
                         iterator.set(OreTiersAPI.REPLACEMENT_IDS.get(line));
                         break;
                     }
