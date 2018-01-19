@@ -8,8 +8,12 @@ import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
@@ -31,6 +35,28 @@ public class OreTiersEventHandler {
 
             // Sets the EXP to drop to 0
             event.setExpToDrop(0);
+
+            // Checks if the player can't harvest the original block, but they can harvest the
+            // replacement block
+            if (!ForgeHooks.canHarvestBlock(event.getState().getBlock(), event.getPlayer(), event.getWorld(), event.getPos()) && BlockUtils.canHarvestSafely(stageInfo.getSecond(), event.getPlayer())) {
+
+                // Drops the replacement block instead
+                this.dropBlock(event.getWorld(), event.getPlayer(), event.getPos(), stageInfo.getSecond());
+            }
+        }
+    }
+
+    // TODO put this in bookshelf BlockUtils
+    public void dropBlock (World world, EntityPlayer player, BlockPos pos, IBlockState state) {
+
+        try {
+
+            state.getBlock().harvestBlock(world, player, pos, state, world.getTileEntity(pos), player.getHeldItemMainhand());
+        }
+
+        catch (final Exception e) {
+
+            OreStages.LOG.trace("Error correcting block drops", e);
         }
     }
 
