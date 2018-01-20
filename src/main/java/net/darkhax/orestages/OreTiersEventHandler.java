@@ -2,10 +2,14 @@ package net.darkhax.orestages;
 
 import java.util.ListIterator;
 
+import javax.annotation.Nonnull;
+
+import net.darkhax.bookshelf.lib.Constants;
 import net.darkhax.bookshelf.util.BlockUtils;
 import net.darkhax.bookshelf.util.RenderUtils;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.orestages.api.OreTiersAPI;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,25 +45,11 @@ public class OreTiersEventHandler {
             if (!ForgeHooks.canHarvestBlock(event.getState().getBlock(), event.getPlayer(), event.getWorld(), event.getPos()) && BlockUtils.canHarvestSafely(stageInfo.getSecond(), event.getPlayer())) {
 
                 // Drops the replacement block instead
-                this.dropBlock(event.getWorld(), event.getPlayer(), event.getPos(), stageInfo.getSecond());
+                BlockUtils.dropBlockSafely(event.getWorld(), event.getPlayer(), event.getPos(), stageInfo.getSecond());
             }
         }
     }
-
-    // TODO put this in bookshelf BlockUtils
-    public void dropBlock (World world, EntityPlayer player, BlockPos pos, IBlockState state) {
-
-        try {
-
-            state.getBlock().harvestBlock(world, player, pos, state, world.getTileEntity(pos), player.getHeldItemMainhand());
-        }
-
-        catch (final Exception e) {
-
-            OreStages.LOG.trace("Error correcting block drops", e);
-        }
-    }
-
+    
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onBreakSpeed (BreakSpeed event) {
 
