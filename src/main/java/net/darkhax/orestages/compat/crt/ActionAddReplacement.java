@@ -28,27 +28,29 @@ public class ActionAddReplacement implements IAction {
     private final String stage;
     private final List<IBlockState> originals;
     private final List<IBlockState> replacements;
+    private final boolean allowDefaultDrop;
 
-    public ActionAddReplacement (String stage, String original, String replacement) {
+    public ActionAddReplacement (String stage, String original, String replacement, boolean defDrop) {
 
-        this(stage, getState(original), getState(replacement));
+        this(stage, getState(original), getState(replacement), defDrop);
     }
 
-    public ActionAddReplacement (String stage, IIngredient original) {
+    public ActionAddReplacement (String stage, IIngredient original, boolean defDrop) {
 
-        this(stage, original, null);
+        this(stage, original, null, defDrop);
     }
 
-    public ActionAddReplacement (String stage, IIngredient original, IItemStack replacement) {
+    public ActionAddReplacement (String stage, IIngredient original, IItemStack replacement, boolean defDrop) {
 
-        this(stage, getStatesFromIngredient(original), replacement != null ? getStatesFromStack(CraftTweakerMC.getItemStack(replacement)) : Arrays.asList(Blocks.STONE.getDefaultState()));
+        this(stage, getStatesFromIngredient(original), replacement != null ? getStatesFromStack(CraftTweakerMC.getItemStack(replacement)) : Arrays.asList(Blocks.STONE.getDefaultState()), defDrop);
     }
 
-    public ActionAddReplacement (String stage, List<IBlockState> originals, List<IBlockState> replacements) {
+    public ActionAddReplacement (String stage, List<IBlockState> originals, List<IBlockState> replacements, boolean defDrop) {
 
         this.stage = stage;
         this.originals = originals;
         this.replacements = replacements;
+        this.allowDefaultDrop = defDrop;
     }
 
     @Override
@@ -68,7 +70,7 @@ public class ActionAddReplacement implements IAction {
 
             for (final IBlockState replacement : this.replacements) {
 
-                OreTiersAPI.addReplacement(this.stage, original, replacement);
+                OreTiersAPI.addReplacement(this.stage, original, replacement, this.allowDefaultDrop);
             }
         }
     }

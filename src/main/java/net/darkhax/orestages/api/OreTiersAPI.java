@@ -33,6 +33,8 @@ public final class OreTiersAPI {
      */
     public static final Map<String, String> REPLACEMENT_IDS = new HashMap<>();
 
+    public static final List<IBlockState> NON_DEFAULTING = new ArrayList<>();
+
     /**
      * Adds a replacement for a block state.
      *
@@ -42,9 +44,9 @@ public final class OreTiersAPI {
      * @param replacement The replacement block.
      * @param replacementMeta The replacement block meta.
      */
-    public static void addReplacement (@Nonnull String stage, @Nonnull Block original, int originalMeta, @Nonnull Block replacement, int replacementMeta) {
+    public static void addReplacement (@Nonnull String stage, @Nonnull Block original, int originalMeta, @Nonnull Block replacement, int replacementMeta, boolean defAllow) {
 
-        addReplacement(stage, original.getStateFromMeta(originalMeta), replacement.getStateFromMeta(replacementMeta));
+        addReplacement(stage, original.getStateFromMeta(originalMeta), replacement.getStateFromMeta(replacementMeta), defAllow);
     }
 
     /**
@@ -54,9 +56,9 @@ public final class OreTiersAPI {
      * @param original The original block.
      * @param replacement The block to replace it with.
      */
-    public static void addReplacement (@Nonnull String stage, @Nonnull Block original, @Nonnull Block replacement) {
+    public static void addReplacement (@Nonnull String stage, @Nonnull Block original, @Nonnull Block replacement, boolean defAllow) {
 
-        addReplacement(stage, original.getDefaultState(), replacement.getDefaultState());
+        addReplacement(stage, original.getDefaultState(), replacement.getDefaultState(), defAllow);
     }
 
     /**
@@ -66,7 +68,7 @@ public final class OreTiersAPI {
      * @param original The original block state.
      * @param replacement The state to replace it with.
      */
-    public static void addReplacement (@Nonnull String stage, @Nonnull IBlockState original, @Nonnull IBlockState replacement) {
+    public static void addReplacement (@Nonnull String stage, @Nonnull IBlockState original, @Nonnull IBlockState replacement, boolean defAllow) {
 
         if (hasReplacement(original)) {
 
@@ -79,6 +81,11 @@ public final class OreTiersAPI {
         addRelevantState(replacement);
 
         REPLACEMENT_IDS.put(original.getBlock().getRegistryName().toString(), replacement.getBlock().getRegistryName().toString());
+
+        if (defAllow) {
+
+            NON_DEFAULTING.add(original);
+        }
     }
 
     /**

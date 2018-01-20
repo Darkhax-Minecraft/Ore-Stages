@@ -86,15 +86,26 @@ public class OreTiersEventHandler {
 
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getState());
 
-        // Checks if the block has a stage and the player is not valid to break it.
-        if (stageInfo != null && (event.getHarvester() == null || !OreTiersAPI.hasStage(event.getHarvester(), stageInfo.getFirst()))) {
+        // Checks if the block has a stage
+        if (stageInfo != null) {
 
-            // Clear the drop list and add the correct drops
-            event.getDrops().clear();
-            event.getDrops().addAll(stageInfo.getSecond().getBlock().getDrops(event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel()));
+            // If player is null, and the block is on the non defaulting whitelist, ignore it.
+            if (event.getHarvester() == null && OreTiersAPI.NON_DEFAULTING.contains(event.getState())) {
 
-            // Reset the drop chance
-            event.setDropChance(ForgeEventFactory.fireBlockHarvesting(event.getDrops(), event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel(), event.getDropChance(), event.isSilkTouching(), event.getHarvester()));
+                return;
+            }
+
+            // If player is null, and the block is not on the whitelist, or the player doesn't
+            // have the correct stage
+            else if (event.getHarvester() == null || !OreTiersAPI.hasStage(event.getHarvester(), stageInfo.getFirst())) {
+
+                // Clear the drop list and add the correct drops
+                event.getDrops().clear();
+                event.getDrops().addAll(stageInfo.getSecond().getBlock().getDrops(event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel()));
+
+                // Reset the drop chance
+                event.setDropChance(ForgeEventFactory.fireBlockHarvesting(event.getDrops(), event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel(), event.getDropChance(), event.isSilkTouching(), event.getHarvester()));
+            }
         }
     }
 
