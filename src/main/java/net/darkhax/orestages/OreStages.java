@@ -11,11 +11,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,14 +28,9 @@ public class OreStages {
     public void preInit (FMLPreInitializationEvent ev) {
 
         MinecraftForge.EVENT_BUS.register(new OreTiersEventHandler());
-
-        if (Loader.isModLoaded("waila")) {
-
-            FMLInterModComms.sendMessage("waila", "register", "net.darkhax.orestages.compat.waila.OreTiersProvider.register");
-        }
     }
 
-    @EventHandler()
+    @EventHandler
     @SideOnly(Side.CLIENT)
     public void onLoadComplete (FMLLoadCompleteEvent event) {
 

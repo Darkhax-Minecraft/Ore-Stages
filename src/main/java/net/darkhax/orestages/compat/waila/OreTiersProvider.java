@@ -5,7 +5,9 @@ import java.util.List;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
+import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.IWailaRegistrar;
+import mcp.mobius.waila.api.WailaPlugin;
 import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.bookshelf.util.StackUtils;
 import net.darkhax.orestages.api.OreTiersAPI;
@@ -19,7 +21,8 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class OreTiersProvider implements IWailaDataProvider {
+@WailaPlugin
+public class OreTiersProvider implements IWailaPlugin, IWailaDataProvider {
 
     @Override
     public ItemStack getWailaStack (IWailaDataAccessor accessor, IWailaConfigHandler config) {
@@ -58,9 +61,9 @@ public class OreTiersProvider implements IWailaDataProvider {
         return tag;
     }
 
-    public static void register (IWailaRegistrar register) {
+    @Override
+    public void register (IWailaRegistrar registrar) {
 
-        final OreTiersProvider provider = new OreTiersProvider();
-        register.registerStackProvider(provider, Block.class);
+        registrar.registerStackProvider(this, Block.class);
     }
 }
