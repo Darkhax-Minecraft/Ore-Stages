@@ -2,20 +2,13 @@ package net.darkhax.orestages;
 
 import java.util.ListIterator;
 
-import javax.annotation.Nonnull;
-
-import net.darkhax.bookshelf.lib.Constants;
 import net.darkhax.bookshelf.util.BlockUtils;
 import net.darkhax.bookshelf.util.RenderUtils;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.orestages.api.OreTiersAPI;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -49,7 +42,7 @@ public class OreTiersEventHandler {
             }
         }
     }
-    
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onBreakSpeed (BreakSpeed event) {
 
