@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class OreTiersEventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onBlockRightClick(PlayerInteractEvent.LeftClickBlock event) {
+    public void onBlockLeftClick(PlayerInteractEvent.LeftClickBlock event) {
         
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getWorld().getBlockState(event.getPos()));
         
