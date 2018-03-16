@@ -35,10 +35,7 @@ public class OreStages {
     public void onLoadComplete (FMLLoadCompleteEvent event) {
 
         // Add a resource reload listener to refresh with texture packs.
-        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(listener -> {
-
-            replaceModels();
-        });
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(listener -> replaceModels());
     }
 
     @SideOnly(Side.CLIENT)
