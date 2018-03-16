@@ -12,8 +12,8 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -24,16 +24,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class OreTiersEventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onBlockLeftClick(PlayerInteractEvent.LeftClickBlock event) {
-        
+    public void onBlockRightClick (PlayerInteractEvent.RightClickBlock event) {
+
         final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getWorld().getBlockState(event.getPos()));
-        
+
         if (stageInfo != null && (event.getEntityPlayer() == null || !OreTiersAPI.hasStage(event.getEntityPlayer(), stageInfo.getFirst()))) {
-            
+
             event.setCanceled(true);
         }
     }
-    
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onBlockBreak (BreakEvent event) {
 
