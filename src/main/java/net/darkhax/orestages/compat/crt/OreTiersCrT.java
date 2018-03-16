@@ -8,7 +8,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("mods.OreTiers")
+@ZenClass("mods.orestages.OreStages")
 public class OreTiersCrT {
 
     @ZenMethod
