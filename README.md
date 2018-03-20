@@ -20,29 +20,29 @@ In situations where no player is present, it will be assumed that there is no st
 ## CraftTweaker methods
 
 This method can be used to replace a block with vanilla stone.
-`mods.OreTiers.addReplacement(String stage, IIngredient original);`
+`mods.orestages.OreStages.addReplacement(String stage, IIngredient original);`
 
 This method can be used to replace a block with another block.
-`mods.OreTiers.addReplacement(String stage, IIngredient original, IItemStack replacement);`
+`mods.orestages.OreStages.addReplacement(String stage, IIngredient original, IItemStack replacement);`
 
 This method can be used to replace a block with another block by specifying exact block ids. The above two methods only work for blocks with items.
-`mods.OreTiers.addReplacementById(String stage, String original, String replacement);`
+`mods.orestages.OreStages.addReplacementById(String stage, String original, String replacement);`
 
 The following methods are used to add a replacement which do not use the defaulting behavior. Meaning if no player broke the block (water, explosion, machine) the block will break as if it was not hidden. 
 
-`mods.OreTiers.addNonDefaultingReplacement(String stage, IIngredient original);`
+`mods.orestages.OreStages.addNonDefaultingReplacement(String stage, IIngredient original);`
 
-`mods.OreTiers.addNonDefaultingReplacement(String stage, IIngredient original, IItemStack replacement);`
+`mods.orestages.OreStages.addNonDefaultingReplacement(String stage, IIngredient original, IItemStack replacement);`
 
-`mods.OreTiers.addNonDefaultingReplacementById(String stage, String original, String replacement);`
+`mods.orestages.OreStages.addNonDefaultingReplacementById(String stage, String original, String replacement);`
 
 ## Example Script
 ```
-mods.OreTiers.addReplacementById("one", "minecraft:potatoes:*", "minecraft:tallgrass:2");
-mods.OreTiers.addReplacementById("two", "minecraft:wheat:*", "minecraft:carrots:3");
-mods.OreTiers.addReplacementById("three", "minecraft:nether_wart:*", "minecraft:beetroots");
-mods.OreTiers.addReplacement("four", <minecraft:dirt>, <minecraft:stone>);
-mods.OreTiers.addReplacement("one", <minecraft:obsidian>, <minecraft:cobblestone>);
-mods.OreTiers.addNonDefaultingReplacement("one", <minecraft:torch:*>, <minecraft:redstone_torch>);
-mods.OreTiers.addReplacement("five", <minecraft:furnace:*>, <minecraft:stone>);
+mods.orestages.OreStages.addReplacementById("one", "minecraft:potatoes:*", "minecraft:tallgrass:2");
+mods.orestages.OreStages.addReplacementById("two", "minecraft:wheat:*", "minecraft:carrots:3");
+mods.orestages.OreStages.addReplacementById("three", "minecraft:nether_wart:*", "minecraft:beetroots");
+mods.orestages.OreStages.addReplacement("four", <minecraft:dirt>, <minecraft:stone>);
+mods.orestages.OreStages.addReplacement("one", <minecraft:obsidian>, <minecraft:cobblestone>);
+mods.orestages.OreStages.addNonDefaultingReplacement("one", <minecraft:torch:*>, <minecraft:redstone_torch>);
+mods.orestages.OreStages.addReplacement("five", <minecraft:furnace:*>, <minecraft:stone>);
 ```
