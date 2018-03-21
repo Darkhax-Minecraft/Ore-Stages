@@ -12,6 +12,7 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
@@ -22,6 +23,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class OreTiersEventHandler {
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onHarvestCheck (PlayerEvent.HarvestCheck event) {
+
+        final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(event.getTargetBlock());
+
+        if (stageInfo != null && !OreTiersAPI.hasStage(event.getEntityPlayer(), stageInfo.getFirst())) {
+
+            // Check if player can harvest the hidden block instead of this one.
+            event.setCanHarvest(event.getEntityPlayer().canHarvestBlock(stageInfo.getSecond()));
+        }
+    }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onBlockRightClick (PlayerInteractEvent.RightClickBlock event) {
