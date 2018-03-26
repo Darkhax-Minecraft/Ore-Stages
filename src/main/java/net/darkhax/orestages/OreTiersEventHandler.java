@@ -8,6 +8,8 @@ import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.ForgeHooks;
@@ -110,7 +112,10 @@ public class OreTiersEventHandler {
 
                 // Clear the drop list and add the correct drops
                 event.getDrops().clear();
-                event.getDrops().addAll(stageInfo.getSecond().getBlock().getDrops(event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel()));
+
+                final NonNullList<ItemStack> drops = NonNullList.create();
+                stageInfo.getSecond().getBlock().getDrops(drops, event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel());
+                event.getDrops().addAll(drops);
 
                 // Reset the drop chance
                 event.setDropChance(ForgeEventFactory.fireBlockHarvesting(event.getDrops(), event.getWorld(), event.getPos(), stageInfo.getSecond(), event.getFortuneLevel(), event.getDropChance(), event.isSilkTouching(), event.getHarvester()));
