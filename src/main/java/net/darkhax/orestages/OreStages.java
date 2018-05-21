@@ -6,13 +6,11 @@ import net.darkhax.bookshelf.lib.LoggingHelper;
 import net.darkhax.bookshelf.util.RenderUtils;
 import net.darkhax.orestages.api.OreTiersAPI;
 import net.darkhax.orestages.client.renderer.block.model.BakedModelTiered;
-import net.darkhax.orestages.compat.theoneprobe.TOPCompatibility;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
@@ -29,9 +27,6 @@ public class OreStages {
     public void preInit (FMLPreInitializationEvent ev) {
         
         MinecraftForge.EVENT_BUS.register(new OreTiersEventHandler());
-        if (Loader.isModLoaded("theoneprobe")) {
-            TOPCompatibility.load();
-        }
     }
     
     @EventHandler
