@@ -52,7 +52,7 @@ public class BakedModelTiered implements IBakedModel {
      */
     private IBakedModel getCorrectModel () {
         
-        return GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), this.stage) ? this.originalModel : this.replacementModel;
+        return PlayerUtils.getClientPlayer() != null && GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), this.stage) ? this.originalModel : this.replacementModel;
     }
     
     public IBakedModel getOriginal () {
