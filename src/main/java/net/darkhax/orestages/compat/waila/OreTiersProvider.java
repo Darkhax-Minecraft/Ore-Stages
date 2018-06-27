@@ -8,11 +8,17 @@ import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.IWailaRegistrar;
 import mcp.mobius.waila.api.WailaPlugin;
+import net.darkhax.bookshelf.util.PlayerUtils;
+import net.darkhax.bookshelf.util.StackUtils;
+import net.darkhax.gamestages.GameStageHelper;
+import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -21,6 +27,13 @@ public class OreTiersProvider implements IWailaPlugin, IWailaDataProvider {
     
     @Override
     public ItemStack getWailaStack (IWailaDataAccessor accessor, IWailaConfigHandler config) {
+        
+        final Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(accessor.getBlockState());
+
+        if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
+
+            return StackUtils.getStackFromState(stageInfo.getSecond(), 1);
+        }
         
         return accessor.getStack();
     }
