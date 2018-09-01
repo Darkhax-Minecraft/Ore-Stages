@@ -146,14 +146,17 @@ public class OreTiersEventHandler {
                 
                 final String line = iterator.next();
                 
-                for (final String string : OreTiersAPI.REPLACEMENT_IDS.keySet()) {
+                if (line != null) {
                     
-                    // Checks if the ID is a hidden ID
-                    if (line.equalsIgnoreCase(string)) {
+                    for (final String string : OreTiersAPI.REPLACEMENT_IDS.keySet()) {
                         
-                        // Replaces the block id with the hidden ID
-                        iterator.set(OreTiersAPI.REPLACEMENT_IDS.get(line));
-                        break;
+                        // Checks if the ID is a hidden ID
+                        if (line.equalsIgnoreCase(string)) {
+                            
+                            // Replaces the block id with the hidden ID
+                            iterator.set(OreTiersAPI.REPLACEMENT_IDS.get(line));
+                            break;
+                        }
                     }
                 }
             }
