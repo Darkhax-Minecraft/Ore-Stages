@@ -22,18 +22,18 @@ version = "1.0"
 group = "com.jarhax.sevtechores"
 archivesBaseName = "SevTechOres"
 
-sourceCompatibility = targetCompatibility = "1.6"
+sourceCompatibility = targetCompatibility = "1.8"
 
 compileJava {
 
-    sourceCompatibility = targetCompatibility = "1.6"
+    sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
 
-    version = "1.10.2-12.18.3.2221"
+    version = "1.10.2-12.18.3.2511"
     runDir = "run"
-    mappings = "snapshot_20161111"
+    mappings = "stable_29"
 }
 
 jar {

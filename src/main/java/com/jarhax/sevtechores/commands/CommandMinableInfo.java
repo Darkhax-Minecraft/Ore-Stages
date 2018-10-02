@@ -8,13 +8,13 @@ import net.minecraft.server.MinecraftServer;
 public class CommandMinableInfo extends CommandBase {
 
 	@Override
-	public String getCommandName () {
+	public String getName () {
 
 		return "mineinfo";
 	}
 
 	@Override
-	public String getCommandUsage (ICommandSender sender) {
+	public String getUsage (ICommandSender sender) {
 
 		return "Prints a list of all blocks this mod could have messed with.";
 	}

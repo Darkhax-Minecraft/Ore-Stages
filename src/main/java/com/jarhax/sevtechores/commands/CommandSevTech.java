@@ -13,13 +13,13 @@ public class CommandSevTech extends CommandTreeBase {
 	}
 
 	@Override
-	public String getCommandName () {
+	public String getName () {
 
 		return STO.MODID;
 	}
 
 	@Override
-	public String getCommandUsage (ICommandSender sender) {
+	public String getUsage (ICommandSender sender) {
 
 		return "The root command for all commands added by the mod.";
 	}
