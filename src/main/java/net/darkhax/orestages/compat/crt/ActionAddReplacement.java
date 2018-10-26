@@ -90,9 +90,12 @@ public class ActionAddReplacement implements IAction {
         
         final List<IBlockState> states = new ArrayList<>();
         
-        for (final ItemStack stack : CraftTweakerMC.getItemStacks(original.getItems())) {
-            
-            states.addAll(getStatesFromStack(stack));
+        if (original != null) {
+          
+            for (final ItemStack stack : CraftTweakerMC.getItemStacks(original.getItems())) {
+                
+                states.addAll(getStatesFromStack(stack));
+            }
         }
         
         return states;
