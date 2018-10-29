@@ -70,6 +70,11 @@ public class ActionAddReplacement implements IAction {
             
             for (final IBlockState replacement : this.replacements) {
                 
+                if (original == replacement) {
+                    
+                    throw new IllegalArgumentException("You can not replace a block with itself!");
+                }
+                
                 OreTiersAPI.addReplacement(this.stage, original, replacement, this.allowDefaultDrop);
             }
         }
