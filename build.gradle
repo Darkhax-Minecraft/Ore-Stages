@@ -64,6 +64,16 @@ repositories {
     
         url 'http://maven.blamejared.com'
     }
+
+    maven {
+
+        url 'http://maven.covers1624.net'
+    }
+
+    maven {
+
+        url 'https://maven.tterrag.com'
+    }
 }
 
 dependencies {
@@ -72,6 +82,7 @@ dependencies {
     deobfProvided "net.darkhax.gamestages:GameStages-1.12.2:${version_gamestages}"
     deobfProvided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${version_minetweaker}"
     deobfProvided "mcp.mobius.waila:Hwyla:${version_hwyla}"
+    deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-${version_top}"
 }
 
 processResources {
